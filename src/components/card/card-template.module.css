@@ -1,0 +1,44 @@
+/*
+  Based on TailwindCSS recommendations,
+  consider using classes instead of the `@apply` directive
+  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
+*/
+.flip-card {
+    @apply bg-transparent w-[300px] h-[200px] border border-solid border-[#f1f1f1];
+    perspective: 1000px;
+  
+    /* Remove this if you don't want the 3D effect */
+  }
+  
+  /* This container is needed to position the front and back side */
+  .flip-card-inner {
+    @apply relative w-full h-full text-center transition-transform duration-700;
+    transform-style: preserve-3d;
+  }
+  
+  /* Do an horizontal flip when you move the mouse over the flip box container */
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  /* Position the front and back side */
+  .flip-card-front,
+  .flip-card-back {
+    @apply absolute w-full h-full;
+    -webkit-backface-visibility: hidden;
+  
+    /* Safari */
+    backface-visibility: hidden;
+  }
+  
+  /* Style the front side (fallback if image is missing) */
+  .flip-card-front {
+    @apply bg-[#bbb] text-[black];
+  }
+  
+  /* Style the back side */
+  .flip-card-back {
+    @apply bg-[dodgerblue] text-[white];
+    transform: rotateY(180deg);
+  }
+  
