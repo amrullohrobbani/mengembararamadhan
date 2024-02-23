@@ -12,7 +12,7 @@
   
   /* This container is needed to position the front and back side */
   .flip-card-inner {
-    @apply relative w-full h-full text-center transition-transform duration-700;
+    @apply relative w-full h-full transition-transform duration-700;
     transform-style: preserve-3d;
   }
   
