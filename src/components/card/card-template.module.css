@@ -4,7 +4,7 @@
   @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
 */
 .flip-card {
-    @apply bg-transparent w-[300px] h-[200px] border border-solid border-[#f1f1f1];
+    @apply bg-transparent border border-solid border-transparent;
     perspective: 1000px;
   
     /* Remove this if you don't want the 3D effect */
@@ -33,12 +33,12 @@
   
   /* Style the front side (fallback if image is missing) */
   .flip-card-front {
-    @apply bg-[#bbb] text-[black];
+    @apply  rounded-md bg-cover border-8 border-[#670100] bg-center bg-[url(../../assets/image/unnamed.png)];
   }
   
   /* Style the back side */
-  .flip-card-back {
-    @apply bg-[dodgerblue] text-[white];
+  .flip-card-back { 
+    @apply bg-transparent text-[white];
     transform: rotateY(180deg);
   }
   
