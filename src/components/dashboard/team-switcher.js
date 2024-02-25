@@ -39,45 +39,89 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
-const groups = [
-  {
-    label: "Personal Account",
-    teams: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
-    label: "Teams",
-    teams: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-]
+import { readDataQuery, readData, addData } from '@/lib/firebase/database/handleData.js'
+import { generateRandomString } from '@/lib/utils'
+import { useAuthContext } from "@/context/AuthContext"
 
-export default function TeamSwitcher({ className }) {
+export default function TeamSwitcher({ className, selectedGroup }) {
   const [open, setOpen] = React.useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
-  const [selectedTeam, setSelectedTeam] = React.useState(
-    groups[0].teams[0]
-  )
+  const [groups, setGroups] = React.useState([
+    {
+      label: "Teams",
+      teams: [
+        {
+          name: "Acme Inc.",
+          id: "acme-inc",
+        },
+        {
+          name: "Monsters Inc.",
+          id: "monsters",
+        },
+      ],
+    }
+  ])
+  const [selectedTeam, setSelectedTeam] = React.useState(groups[0]?.teams?.[0])
+
+  const { user } = useAuthContext()
+
+  const getInitials = (inputString) => {
+    if(!inputString) return 
+    const words = inputString.split(' ')
+    const initials = words.map((word) => word[0].toUpperCase())
+    return initials.join('')
+  }
+
+  const fetchData = React.useCallback(async () => {
+    const response = await readDataQuery('teams', [user?.uid?`members.${user?.uid}`:undefined, '==', true])
+    if(response) {
+      setGroups([{
+        label: "Teams",
+        teams: response,
+      }])
+    }
+}, [user?.uid])
+
+  React.useEffect(() => {
+    fetchData()
+  }, [fetchData, user?.uid])
+
+  React.useEffect(() => {
+    setSelectedTeam(groups[0]?.teams?.[0])
+    selectedGroup(groups[0]?.teams?.[0])
+  }, [groups])
+
+  const handleCreateNew = async (formData) => {
+    setLoading(true)
+    const key = generateRandomString()
+    const responseTeams = await readData(['teams',  key])
+    if(responseTeams){
+      setLoading(false)
+      return toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      })
+    }
+    const payload = {
+      name: formData.get('group-name'),
+      createdBy: user.uid,
+      members: {}
+    }
+    payload.members[user.uid] = true
+    addData(['teams',  key], payload)
+    const userTeamsPayload = {}
+    userTeamsPayload[key] = true
+    addData(['usersTeams',  user.uid], userTeamsPayload)
+    toast({
+      title: "Good Job",
+      description: "You can start your journey",
+    })
+    setSelectedTeam(groups[0].teams[groups[0].teams.length - 1])
+    selectedGroup(selectedTeam)
+    setShowNewTeamDialog(false)
+  }
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -91,25 +135,20 @@ export default function TeamSwitcher({ className }) {
             className={cn("justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
-                className="grayscale"
-              />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>{getInitials(selectedTeam.name)}</AvatarFallback>
             </Avatar>
-            <span className="hidden md:block">{selectedTeam.label}</span>
+            <span className="hidden md:block">{selectedTeam.name} - {selectedTeam.id}</span>
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="p-0">
           <Command>
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
+                <CommandGroup key={group.name} heading={group.name}>
+                  {group.teams?.map((team) => (
                     <CommandItem
                       key={team.value}
                       onSelect={() => {
@@ -119,14 +158,9 @@ export default function TeamSwitcher({ className }) {
                       className="text-sm"
                     >
                       <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
+                       <AvatarFallback>{getInitials(selectedTeam.name)}</AvatarFallback>
                       </Avatar>
-                      {team.label}
+                      <span className="whitespace-nowrap">{team.name} - {team.id}</span>
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
@@ -160,48 +194,28 @@ export default function TeamSwitcher({ className }) {
         </PopoverContent>
       </Popover>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
-          <DialogDescription>
-            Add a new team to manage products and customers.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+        <form className="w-full" action={handleCreateNew}>
+          <DialogHeader>
+            <DialogTitle>Create team</DialogTitle>
+            <DialogDescription>
+              Add a new team.
+            </DialogDescription>
+          </DialogHeader>
+          <div>
+            <div className="space-y-4 py-2 pb-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Team name</Label>
+                <Input name="group-name"  id="idGroup" placeholder="Group ID" />
+              </div>
             </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
-            Cancel
-          </Button>
-          <Button type="submit">Continue</Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
+              Cancel
+            </Button>
+            <Button type="submit">Continue</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

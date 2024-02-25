@@ -1,21 +1,30 @@
-"use client"
-
-import * as React from "react"
+'use client'
+import { useState, useEffect } from 'react'
+import { signInWithGoogle } from '@/lib/firebase/auth'
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
+import { useAuthContext } from "@/context/AuthContext"
+import { useRouter } from 'next/navigation'
+
 export function UserAuthForm({ className, ...props }) {
-  const [isLoading, setIsLoading] = React.useState(false)
-
-  async function onSubmit(event) {
-    event.preventDefault()
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const { user } = useAuthContext()
+  
+  async function handleSignIn() {
     setIsLoading(true)
+    await signInWithGoogle()
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    router.push('/')
+    setIsLoading(false)
   }
+
+  useEffect(() => {
+      if (user !== null) router.push("/")
+  }, [router, user])
+
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -29,7 +38,7 @@ export function UserAuthForm({ className, ...props }) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
+      <Button variant="outline" type="button" disabled={isLoading} onClick={handleSignIn} >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
