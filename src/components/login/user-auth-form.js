@@ -21,11 +21,6 @@ export function UserAuthForm({ className, ...props }) {
     setIsLoading(false)
   }
 
-  useEffect(() => {
-      if (user !== null) router.push("/")
-  }, [router, user])
-
-
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <div className="relative">

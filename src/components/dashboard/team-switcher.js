@@ -47,22 +47,8 @@ import { useAuthContext } from "@/context/AuthContext"
 export default function TeamSwitcher({ className, selectedGroup }) {
   const [open, setOpen] = React.useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
-  const [groups, setGroups] = React.useState([
-    {
-      label: "Teams",
-      teams: [
-        {
-          name: "Acme Inc.",
-          id: "acme-inc",
-        },
-        {
-          name: "Monsters Inc.",
-          id: "monsters",
-        },
-      ],
-    }
-  ])
-  const [selectedTeam, setSelectedTeam] = React.useState(groups[0]?.teams?.[0])
+  const [groups, setGroups] = React.useState([])
+  const [selectedTeam, setSelectedTeam] = React.useState()
 
   const { user } = useAuthContext()
 
@@ -135,9 +121,9 @@ export default function TeamSwitcher({ className, selectedGroup }) {
             className={cn("justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
-              <AvatarFallback>{getInitials(selectedTeam.name)}</AvatarFallback>
+              <AvatarFallback>{getInitials(selectedTeam?.name)}</AvatarFallback>
             </Avatar>
-            <span className="hidden md:block">{selectedTeam.name} - {selectedTeam.id}</span>
+            <span className="hidden md:block">{selectedTeam?.name} - {selectedTeam?.id}</span>
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -146,11 +132,11 @@ export default function TeamSwitcher({ className, selectedGroup }) {
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.name} heading={group.name}>
-                  {group.teams?.map((team) => (
+              {groups.map((group, index) => (
+                <CommandGroup key={index} heading={group.label}>
+                  {group.teams?.map((team, indexes) => (
                     <CommandItem
-                      key={team.value}
+                      key={indexes}
                       onSelect={() => {
                         setSelectedTeam(team)
                         setOpen(false)
@@ -158,13 +144,13 @@ export default function TeamSwitcher({ className, selectedGroup }) {
                       className="text-sm"
                     >
                       <Avatar className="mr-2 h-5 w-5">
-                       <AvatarFallback>{getInitials(selectedTeam.name)}</AvatarFallback>
+                       <AvatarFallback>{getInitials(selectedTeam?.name)}</AvatarFallback>
                       </Avatar>
                       <span className="whitespace-nowrap">{team.name} - {team.id}</span>
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          selectedTeam?.value === team.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}

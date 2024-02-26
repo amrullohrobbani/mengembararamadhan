@@ -6,6 +6,7 @@ import {
 
 import { Icons } from "@/components/icons"
 import { auth } from "@/lib/firebase/firebase"
+import { useRouter } from 'next/navigation'
 
 export const AuthContext = React.createContext({})
 
@@ -16,19 +17,23 @@ export const AuthContextProvider = ({
 }) => {
     const [user, setUser] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
+    const router = useRouter()
 
     React.useEffect(() => {
+        setLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user)
+                router.push('/')
             } else {
                 setUser(null)
+                router.push('/login')
             }
             setLoading(false)
         })
 
         return () => unsubscribe()
-    }, [])
+    }, [router])
 
     return (
         <AuthContext.Provider value={{ user }}>

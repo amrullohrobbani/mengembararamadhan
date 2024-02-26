@@ -10,7 +10,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableRow,
 } from "@/components/ui/table"
 import {
@@ -18,14 +17,17 @@ import {
     AvatarFallback,
     AvatarImage,
   } from "@/components/ui/avatar"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData } from '@/lib/firebase/database/handleData.js'
+import { level, rank } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
 import medal2 from '@/assets/image/t_common_icon_no_2.webp'
 import medal3 from '@/assets/image/t_common_icon_no_3.webp'
+import RankIcon from "@/components/dashboard/rank-icon"
+import InputModal from "@/components/dashboard/input-modal"
 
 const data = [
   {
@@ -70,51 +72,6 @@ const data = [
     pv: 4300,
     amt: 2100,
   },
-];
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.0011",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
 ]
 
 export default function Home() {
@@ -139,6 +96,7 @@ export default function Home() {
       const response = await readData(['users',  user.uid])
       if(!response){
         addData(['users',  user.uid], {
+          uid: user.uid,
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
@@ -151,26 +109,21 @@ export default function Home() {
       if(!responseTeams){
         router.push('/init')
       }
-      const responsePlayers = await readDataQuery('usersTeams', [teams?.id, '==', true])
-      let playerData = []
-      responsePlayers?.map(async (obj) => {
-        const response = await readData(['users', obj.id])
-        playerData.push(response)
-      })
-      setPlayers(playerData)
-      console.log(teams)
-
+      if(teams){
+        const memberOfTeam = await readData(['teams', teams?.id])
+        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp'])
+        setPlayers(playerList)
+      }
       return response
   }, [router, teams, user])
 
   useEffect(() => {
-    if (!user) router.push("/login")
     if (user) {
       setLoading(true)
       fetchData()
       setLoading(false)
     }
-  }, [fetchData, router, user])
+  }, [fetchData, user])
   
   return (
     <main className="min-h-screen h-auto md:h-screen p-5 py-24 md:p-24 no-scrollbar">
@@ -185,6 +138,7 @@ export default function Home() {
           </div>
           <UserNav user={user}/>
         </div>
+        <InputModal />
       </div>
       
       <div>
@@ -197,10 +151,13 @@ export default function Home() {
             <div className="flex justify-center w-full h-1/3">
               <div className="flex justify-center gap-5 px-12 md:px-0">
                 <div className="flex flex-col justify-end">
-                  <div className="text-center">
-                    Juara 3
+                  <div className="flex justify-center">
+                    <Avatar className="h-8 w-8 mb-1">
+                      <AvatarImage src={players?.[2]?.photoURL} alt="PP" />
+                      <AvatarFallback>{getInitials(players?.[2]?.displayName)}</AvatarFallback>
+                    </Avatar>
                   </div>
-                  <div className="bg-white px-5 h-2/5 text-center"> 
+                  <div className="bg-white px-5 pt-1 h-2/5 text-center"> 
                     <Image
                       priority
                       src={medal3}
@@ -211,12 +168,12 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col justify-end">
                   <div className="flex justify-center">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={players[0]?.photoURL} alt="@shadcn" />
-                      <AvatarFallback>{getInitials(players[0]?.displayName)}</AvatarFallback>
+                    <Avatar className="h-8 w-8 mb-1">
+                      <AvatarImage src={players?.[0]?.photoURL} alt="PP" />
+                      <AvatarFallback>{getInitials(players?.[0]?.displayName)}</AvatarFallback>
                     </Avatar>
                   </div>
-                  <div className="bg-white px-5 h-4/5">
+                  <div className="bg-white px-5 pt-1 h-4/5">
                     <Image
                       priority
                       src={medal1}
@@ -225,10 +182,13 @@ export default function Home() {
                   </div> 
                 </div>
                 <div className="flex flex-col justify-end">
-                  <div className="text-center">
-                    Juara 2
+                  <div className="flex justify-center">
+                    <Avatar className="h-8 w-8 mb-1">
+                      <AvatarImage src={players?.[1]?.photoURL} alt="PP" />
+                      <AvatarFallback>{getInitials(players?.[1]?.displayName)}</AvatarFallback>
+                    </Avatar>
                   </div>
-                  <div className="bg-white px-5 h-3/5">
+                  <div className="bg-white px-5 pt-1 h-3/5">
                     <Image
                       priority
                       src={medal2}
@@ -243,21 +203,23 @@ export default function Home() {
               <div className="h-full">
                 <Table>
                   <TableBody>
-                    {invoices.map((invoice) => (
-                      <TableRow key={invoice.invoice}>
-                        <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                        <TableCell>{invoice.paymentStatus}</TableCell>
-                        <TableCell>{invoice.paymentMethod}</TableCell>
-                        <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+                    {players?.map((player, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{ index + 1 }</TableCell>
+                        <TableCell>
+                          <Avatar className="h-8 w-8 mb-1">
+                            <AvatarImage src={player?.photoURL} alt="PP" />
+                            <AvatarFallback>{getInitials(player?.displayName)}</AvatarFallback>
+                          </Avatar>
+                        </TableCell>
+                        <TableCell>{player?.displayName}</TableCell>
+                        <TableCell>{level(player.exp)}</TableCell>
+                        <TableCell className="relative">
+                            <RankIcon rank={rank(level(player.exp))} />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">$2,500.00</TableCell>
-                    </TableRow>
-                  </TableFooter>
                 </Table>
               </div>
             </div>
@@ -271,21 +233,23 @@ export default function Home() {
               <div className="h-full">
                 <Table>
                   <TableBody>
-                    {invoices.map((invoice) => (
-                      <TableRow key={invoice.invoice}>
-                        <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                        <TableCell>{invoice.paymentStatus}</TableCell>
-                        <TableCell>{invoice.paymentMethod}</TableCell>
-                        <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+                  {players?.map((player, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{ index + 1 }</TableCell>
+                        <TableCell>
+                          <Avatar className="h-8 w-8 mb-1">
+                            <AvatarImage src={player?.photoURL} alt="PP" />
+                            <AvatarFallback>{getInitials(player?.displayName)}</AvatarFallback>
+                          </Avatar>
+                        </TableCell>
+                        <TableCell>{player?.displayName}</TableCell>
+                        <TableCell>{level(player.exp)}</TableCell>
+                        <TableCell className="relative">
+                            <RankIcon rank={rank(level(player.exp))} />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TableCell colSpan={3}>Total</TableCell>
-                      <TableCell className="text-right">$2,500.00</TableCell>
-                    </TableRow>
-                  </TableFooter>
                 </Table>
               </div>
             </div>

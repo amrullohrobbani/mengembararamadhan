@@ -92,7 +92,6 @@ export default function InitPage() {
   }
 
   useEffect(() => {
-      if (!user) router.push("/login")
       if(user) fetchData()
   }, [fetchData, router, user])
 
