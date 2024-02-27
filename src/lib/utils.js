@@ -6,6 +6,8 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }
 
+export const amalan = ['rawatib', 'dhuha', 'mengaji', 'tahajud', 'infaq']
+
 export function generateRandomString() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let randomString = '';
@@ -23,13 +25,13 @@ export function sumTotal(convertedResult) {
   let multipliers = {
     rawatib: 2,
     dhuha: 2,
-    infaq: 3,
+    infaq: 3/10000,
     tahajud: 5,
     mengaji: 3
   }
 
   for (let prop in convertedResult) {
-    if (multipliers[prop] && prop !== 'uid' && prop !== 'createdAt') {
+    if (multipliers[prop] && amalan.includes(prop)) {
       total += convertedResult[prop] * multipliers[prop]
     }
   }

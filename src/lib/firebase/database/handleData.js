@@ -6,6 +6,7 @@ export async function addData(path, data) {
     await setDoc(docRef, data)
 }
 
+
 export async function readData(path) {
     if(!path?.[0]) return
     const docRef = doc(db, ...path)
@@ -22,6 +23,19 @@ export async function readDataQuery(path, params, order) {
     } else {
         docQuery = query(docRef, where(...params), orderBy(...order))
     }
+    const docSnap = await getDocs(docQuery)
+    let result = []
+    docSnap.forEach((doc) => result.push({
+        id: doc.id,
+        ...doc.data()
+    }))
+    return result
+}
+
+export async function readDataQueryCustom(path, params) {
+    const docRef = collection(db, path)
+    if(!params[0]) return
+    const docQuery = query(docRef, ...params)
     const docSnap = await getDocs(docQuery)
     let result = []
     docSnap.forEach((doc) => result.push({

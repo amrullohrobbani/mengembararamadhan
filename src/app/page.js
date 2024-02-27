@@ -20,65 +20,24 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
-import { readData, readDataQuery, addData } from '@/lib/firebase/database/handleData.js'
-import { level, rank } from '@/lib/utils'
+import { readData, readDataQuery, addData, readDataQueryCustom } from '@/lib/firebase/database/handleData.js'
+import { level, rank, amalan, sumTotal } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
 import medal2 from '@/assets/image/t_common_icon_no_2.webp'
 import medal3 from '@/assets/image/t_common_icon_no_3.webp'
 import RankIcon from "@/components/dashboard/rank-icon"
-import InputModal from "@/components/dashboard/input-modal"
-
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-]
+import InputModal from "@/components/dashboard/input-modal" 
+import { where, Timestamp } from "firebase/firestore"
+import dayjs from "dayjs"
 
 export default function Home() {
   const { user } = useAuthContext()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [players, setPlayers] = useState([])
+  const [topAmalan, setTopAmalan] = useState([])
+  const [myProgress, setMyProgress] = useState([])
   const [teams, setTeams] = useState()
 
   const getInitials = (inputString) => {
@@ -113,6 +72,43 @@ export default function Home() {
         const memberOfTeam = await readData(['teams', teams?.id])
         const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp'])
         setPlayers(playerList)
+        const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
+        season.find((obj) => obj.endDate >= Timestamp.now())
+        const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', '==', user.uid)])
+        setTopAmalan(() => {
+          let result = {}
+          for (let key in amalanList) {
+            let obj = amalanList[key]
+            for (let prop in obj) {
+              if (amalan.includes(prop)) {
+                if (result[prop] === undefined) {
+                  result[prop] = obj[prop]
+                } else {
+                  result[prop] += obj[prop]
+                }
+              }
+            }
+            result.infaq = result.infaq/10000
+          }
+          Object.fromEntries(
+            Object.entries(result).sort((a, b) => b[1] - a[1])
+          )
+          return result
+        })
+        const dateArray = [];
+        // Generate an array of dates for the past 7 days
+        for (let i = 0; i < 7; i++) {
+          const currentDate = dayjs().subtract(i, 'day');
+          const formattedDate = currentDate.format('YYYY-MM-DD');
+          dateArray.push(formattedDate);
+        }
+        const amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', '==', user.uid)])
+        setMyProgress(dateArray.map((date) => {
+          return {
+            date: dayjs(date).format('DD MMM YYYY'),
+            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date))
+          }
+        }).reverse())
       }
       return response
   }, [router, teams, user])
@@ -138,9 +134,9 @@ export default function Home() {
           </div>
           <UserNav user={user}/>
         </div>
-        <InputModal />
       </div>
       
+      <InputModal />
       <div>
         <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>
@@ -233,20 +229,11 @@ export default function Home() {
               <div className="h-full">
                 <Table>
                   <TableBody>
-                  {players?.map((player, index) => (
+                  {Object.entries(topAmalan)?.map(([amal, value], index) => (
                       <TableRow key={index}>
                         <TableCell>{ index + 1 }</TableCell>
-                        <TableCell>
-                          <Avatar className="h-8 w-8 mb-1">
-                            <AvatarImage src={player?.photoURL} alt="PP" />
-                            <AvatarFallback>{getInitials(player?.displayName)}</AvatarFallback>
-                          </Avatar>
-                        </TableCell>
-                        <TableCell>{player?.displayName}</TableCell>
-                        <TableCell>{level(player.exp)}</TableCell>
-                        <TableCell className="relative">
-                            <RankIcon rank={rank(level(player.exp))} />
-                        </TableCell>
+                        <TableCell className="capitalize">{amal}</TableCell>
+                        <TableCell>{value}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -262,7 +249,7 @@ export default function Home() {
                   <LineChart
                     width={500}
                     height={300}
-                    data={data}
+                    data={myProgress}
                     margin={{
                       top: 5,
                       right: 30,
@@ -271,11 +258,10 @@ export default function Home() {
                     }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="date" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
                   </LineChart>
                 </ResponsiveContainer>      
               </div>
