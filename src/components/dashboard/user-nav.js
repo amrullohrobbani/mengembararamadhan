@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label"
 import { readData, addData } from '@/lib/firebase/database/handleData.js'
 import { generateRandomString } from '@/lib/utils'
 import { signOut } from "@/lib/firebase/auth"
+import Link from "next/link"
 
   export function UserNav({user}) {
     const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
@@ -95,9 +96,11 @@ import { signOut } from "@/lib/firebase/auth"
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                Profile
-              </DropdownMenuItem>
+              <Link href="/profile">
+                <DropdownMenuItem>
+                  Profile
+                </DropdownMenuItem>
+              </Link>
               <DialogTrigger asChild>
                 <DropdownMenuItem>New Team</DropdownMenuItem>
               </DialogTrigger>

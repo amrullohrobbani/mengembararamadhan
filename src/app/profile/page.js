@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card"
 import {
   Table,
+  TableHeader,
+  TableHead,
   TableBody,
   TableCell,
   TableRow,
@@ -21,7 +23,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData, readDataQueryCustom } from '@/lib/firebase/database/handleData.js'
-import { level, rank, amalan, sumTotal } from '@/lib/utils'
+import { level, rank, amalan, sumTotal, formatCurrency } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
 import medal2 from '@/assets/image/t_common_icon_no_2.webp'
@@ -38,6 +40,7 @@ export default function Home() {
   const [players, setPlayers] = useState([])
   const [topAmalan, setTopAmalan] = useState([])
   const [myProgress, setMyProgress] = useState([])
+  const [listAmalan, setListAmalan] = useState([])
   const [teams, setTeams] = useState()
 
   const getInitials = (inputString) => {
@@ -74,7 +77,9 @@ export default function Home() {
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
         season.find((obj) => obj.endDate >= Timestamp.now())
-        const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', 'in', playerList.map((obj) => obj.id))])
+        const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', '==', user.uid)])
+        setListAmalan(amalanList)
+        console.log(amalanList)
         setTopAmalan(() => {
           let result = {}
           for (let key in amalanList) {
@@ -104,7 +109,7 @@ export default function Home() {
           const formattedDate = currentDate.format('YYYY-MM-DD');
           dateArray.push(formattedDate);
         }
-        const amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', 'in', playerList.map((obj) => obj.id))])
+        const amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', '==', user.uid)])
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
@@ -140,81 +145,86 @@ export default function Home() {
       
       <InputModal refetchData={fetchData} />
       <div>
-        <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Dashboard</h2>
+        <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Profile</h2>
       </div>
       <div className="w-full h-full flex flex-col md:flex-row gap-5">
         <div className="w-full">
           <Card className="flex flex-col w-full !h-full bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center my-5 font-semibold">Top Players</div>
-            <div className="flex justify-center w-full h-1/3">
-              <div className="flex justify-center gap-5 px-12 md:px-0">
-                <div className="flex flex-col justify-end">
-                  <div className="flex justify-center">
-                    <Avatar className="h-8 w-8 mb-1">
-                      <AvatarImage src={players?.[2]?.photoURL} alt="PP" />
-                      <AvatarFallback>{getInitials(players?.[2]?.displayName)}</AvatarFallback>
-                    </Avatar>
+            <div className="w-full text-center my-5 font-semibold">{user.displayName}</div>
+            <div className="flex justify-center w-full h-1/2">
+              <div className="flex w-full justify-center gap-5 px-2 md:px-0">
+                <div className="w-1/2 text-center">
+                    <div className="font-semibold">
+                      Your Rank
+                    </div>
+                    <div className="w-1/2 p-12 mx-auto">
+                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 1 &&
+                        <Image
+                          priority
+                          src={medal1}
+                          alt="medal"
+                          className="w-full"
+                        />
+                      }
+                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 2 &&
+                        <Image
+                          priority
+                          src={medal2}
+                          alt="medal"
+                          className="w-full"
+                        />
+                      }
+                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 3 &&
+                        <Image
+                          priority
+                          src={medal3}
+                          alt="medal"
+                          className="w-full"
+                        />
+                      }
+                      {players.findIndex((obj) => obj.uid === user.uid) +1 > 3 &&
+                        <code className="text-5xl font-semibold italic">
+                          {players.findIndex((obj) => obj.uid === user.uid) + 1}
+                        </code>
+                      }
+                    </div>
                   </div>
-                  <div className="bg-white px-5 pt-1 h-2/5 text-center"> 
-                    <Image
-                      priority
-                      src={medal3}
-                      alt="medal"
-                      className="scale-50"
-                    />
-                  </div> 
-                </div>
-                <div className="flex flex-col justify-end">
-                  <div className="flex justify-center">
-                    <Avatar className="h-8 w-8 mb-1">
-                      <AvatarImage src={players?.[0]?.photoURL} alt="PP" />
-                      <AvatarFallback>{getInitials(players?.[0]?.displayName)}</AvatarFallback>
-                    </Avatar>
+                  <div className="flex flex-col justify-center">
+                    <div className="grid grid-cols-2 justify-center items-center gap-5">
+                      <Avatar className="h-32 w-32 mb-1">
+                        <AvatarImage src={players?.[0]?.photoURL} alt="PP" />
+                        <AvatarFallback>{getInitials(players?.[0]?.displayName)}</AvatarFallback>
+                      </Avatar>
+                      <div className="relative w-full h-full">
+                        <RankIcon rank={rank(level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp))} />
+                      </div>
+                    </div>
+                    <div className="text-center mt-5 font-semibold">Level {level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp)} {rank(level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp))}</div>
                   </div>
-                  <div className="bg-white px-5 pt-1 h-4/5">
-                    <Image
-                      priority
-                      src={medal1}
-                      alt="medal"
-                    />
-                  </div> 
-                </div>
-                <div className="flex flex-col justify-end">
-                  <div className="flex justify-center">
-                    <Avatar className="h-8 w-8 mb-1">
-                      <AvatarImage src={players?.[1]?.photoURL} alt="PP" />
-                      <AvatarFallback>{getInitials(players?.[1]?.displayName)}</AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <div className="bg-white px-5 pt-1 h-3/5">
-                    <Image
-                      priority
-                      src={medal2}
-                      alt="medal"
-                      className="scale-75"
-                    />
-                  </div> 
-                </div>
               </div>
             </div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
-                <Table>
+                <Table>  
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead >Date</TableHead>
+                      <TableHead>Rawatib</TableHead>
+                      <TableHead>Dhuha</TableHead>
+                      <TableHead>Mengaji</TableHead>
+                      <TableHead>Infaq</TableHead>
+                      <TableHead>Tahajud</TableHead>
+                    </TableRow>
+                  </TableHeader>
                   <TableBody>
-                    {players?.map((player, index) => (
+                    {listAmalan?.map((player, index) => (
                       <TableRow key={index}>
-                        <TableCell>{ index + 1 }</TableCell>
-                        <TableCell>
-                          <Avatar className="h-8 w-8 mb-1">
-                            <AvatarImage src={player?.photoURL} alt="PP" />
-                            <AvatarFallback>{getInitials(player?.displayName)}</AvatarFallback>
-                          </Avatar>
-                        </TableCell>
-                        <TableCell>{player?.displayName}</TableCell>
-                        <TableCell>{level(player.exp)}</TableCell>
-                        <TableCell className="relative">
-                            <RankIcon rank={rank(level(player.exp))} />
-                        </TableCell>
+                        <TableCell>{dayjs(player.date).format('dddd, DD MM YYYY')}</TableCell>
+                        <TableCell>{player.rawatib}</TableCell>
+                        <TableCell>{player.dhuha}</TableCell>
+                        <TableCell>{player.mengaji}</TableCell>
+                        <TableCell>Rp. {formatCurrency(player.infaq)}</TableCell>
+                        <TableCell>{player.tahajud}</TableCell>                        
                       </TableRow>
                     ))}
                   </TableBody>
@@ -226,25 +236,7 @@ export default function Home() {
 
         <div className="w-full flex flex-col gap-5">
           <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Top Daily</div>
-            <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
-              <div className="h-full">
-                <Table>
-                  <TableBody>
-                  {topAmalan?.map((obj, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{ index + 1 }</TableCell>
-                        <TableCell className="capitalize">{obj.name}</TableCell>
-                        <TableCell>{obj.value}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </Card>
-          <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Team Progress</div>
+            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Progress</div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -266,6 +258,24 @@ export default function Home() {
                     <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
                   </LineChart>
                 </ResponsiveContainer>      
+              </div>
+            </div>
+          </Card>
+          <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
+            <div className="w-full text-center mt-5 mb-1 font-semibold">Top Daily</div>
+            <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
+              <div className="h-full">
+                <Table>
+                  <TableBody>
+                  {topAmalan?.map((obj, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{ index + 1 }</TableCell>
+                        <TableCell className="capitalize">{obj.name}</TableCell>
+                        <TableCell>{obj.value}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </div>
           </Card>

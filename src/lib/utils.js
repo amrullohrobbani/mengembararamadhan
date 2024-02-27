@@ -8,6 +8,15 @@ export function cn(...inputs) {
 
 export const amalan = ['rawatib', 'dhuha', 'mengaji', 'tahajud', 'infaq']
 
+export function formatCurrency(value) {
+  if (value >= 0) {
+    value = value.toString()
+    value = value.replace(/\./g, '')
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+  return ''
+}
+
 export function generateRandomString() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let randomString = '';
