@@ -45,6 +45,7 @@ import { generateRandomString } from '@/lib/utils'
 import { useAuthContext } from "@/context/AuthContext"
 
 export default function TeamSwitcher({ className, selectedGroup }) {
+  const [loading, setLoading]= React.useState(false)
   const [open, setOpen] = React.useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
   const [groups, setGroups] = React.useState([])
@@ -107,6 +108,7 @@ export default function TeamSwitcher({ className, selectedGroup }) {
     setSelectedTeam(groups[0].teams[groups[0].teams.length - 1])
     selectedGroup(selectedTeam)
     setShowNewTeamDialog(false)
+    fetchData()
   }
 
   return (
@@ -196,7 +198,10 @@ export default function TeamSwitcher({ className, selectedGroup }) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
+            <Button variant="outline" onClick={(e) => {
+              e.preventDefault()
+              setShowNewTeamDialog(false)
+            }}>
               Cancel
             </Button>
             <Button type="submit">Continue</Button>

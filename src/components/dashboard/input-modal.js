@@ -19,7 +19,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { where, Timestamp } from "firebase/firestore"
 import dayjs from "dayjs"
 
-export default function InputModal({className, ...props}) {
+export default function InputModal({className, refetchData, ...props}) {
   const { user } = useAuthContext()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
@@ -65,6 +65,7 @@ export default function InputModal({className, ...props}) {
       })
     } finally {
       setIsLoading(false)
+      refetchData()
     }
   }
 

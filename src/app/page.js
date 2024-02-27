@@ -90,10 +90,12 @@ export default function Home() {
             }
             result.infaq = result.infaq/10000
           }
-          Object.fromEntries(
-            Object.entries(result).sort((a, b) => b[1] - a[1])
-          )
-          return result
+          return Object.entries(result).map(([key, value]) => {
+            return {
+              name: key,
+              value: value
+            }
+          }).sort((a, b) => b.value - a.value)
         })
         const dateArray = [];
         // Generate an array of dates for the past 7 days
@@ -136,7 +138,7 @@ export default function Home() {
         </div>
       </div>
       
-      <InputModal />
+      <InputModal refetchData={fetchData} />
       <div>
         <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>
@@ -229,11 +231,11 @@ export default function Home() {
               <div className="h-full">
                 <Table>
                   <TableBody>
-                  {Object.entries(topAmalan)?.map(([amal, value], index) => (
+                  {topAmalan?.map((obj, index) => (
                       <TableRow key={index}>
                         <TableCell>{ index + 1 }</TableCell>
-                        <TableCell className="capitalize">{amal}</TableCell>
-                        <TableCell>{value}</TableCell>
+                        <TableCell className="capitalize">{obj.name}</TableCell>
+                        <TableCell>{obj.value}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
