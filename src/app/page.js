@@ -52,6 +52,7 @@ export default function Home() {
   }
 
   const fetchData = useCallback(async () => {
+      setLoading(true)
       const response = await readData(['users',  user.uid])
       if(!response){
         addData(['users',  user.uid], {
@@ -70,7 +71,7 @@ export default function Home() {
       }
       if(teams){
         const memberOfTeam = await readData(['teams', teams?.id])
-        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp'])
+        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp', 'desc'])
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
         season.find((obj) => obj.endDate >= Timestamp.now())
@@ -112,20 +113,19 @@ export default function Home() {
           }
         }).reverse())
       }
+      setLoading(false)
       return response
   }, [router, teams, user])
 
   useEffect(() => {
     if (user) {
-      setLoading(true)
       fetchData()
-      setLoading(false)
     }
-  }, [fetchData, user])
+  }, [fetchData, user, teams])
   
   return (
     <main className="min-h-screen h-auto md:h-screen p-5 py-24 md:p-24 no-scrollbar">
-      {loading ? <div className='flex h-screen w-screen justify-center items-center bg-white/10'>
+      {loading ? <div className='z-[100] fixed top-0 left-0 flex h-screen w-screen justify-center items-center bg-white/50'>
         <Icons.spinner className="mr-2 h-16 w-16 animate-spin" />
       </div> : undefined}
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">

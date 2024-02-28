@@ -150,7 +150,7 @@ export default function Home() {
       <div className="w-full h-full flex flex-col md:flex-row gap-5">
         <div className="w-full">
           <Card className="flex flex-col w-full !h-full bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center my-5 font-semibold">{user.displayName}</div>
+            <div className="w-full text-center my-5 font-semibold">{user?.displayName}</div>
             <div className="flex justify-center w-full h-1/2">
               <div className="flex w-full justify-center gap-5 px-2 md:px-0">
                 <div className="w-1/2 text-center">

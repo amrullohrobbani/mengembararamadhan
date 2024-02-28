@@ -13,6 +13,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { useToast } from "@/components/ui/use-toast"  
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -50,6 +51,8 @@ export default function TeamSwitcher({ className, selectedGroup }) {
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
   const [groups, setGroups] = React.useState([])
   const [selectedTeam, setSelectedTeam] = React.useState()
+  const { toast } = useToast()
+
 
   const { user } = useAuthContext()
 
@@ -141,6 +144,7 @@ export default function TeamSwitcher({ className, selectedGroup }) {
                       key={indexes}
                       onSelect={() => {
                         setSelectedTeam(team)
+                        selectedGroup(team) 
                         setOpen(false)
                       }}
                       className="text-sm"

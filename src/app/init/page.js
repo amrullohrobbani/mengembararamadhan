@@ -77,13 +77,17 @@ export default function InitPage() {
       })
     }
     const payload = {
-      members: {}
+      [`members.${user.uid}`]: true
     }
-    payload.members[user.uid] = true
     updateData(['teams',  key], payload)
     const userTeamsPayload = {}
     userTeamsPayload[key] = true
-    updateData(['usersTeams',  user.uid], userTeamsPayload)
+    const userTeamData = await readData(['usersTeams',  user.uid])
+    if(userTeamData){
+      updateData(['usersTeams',  user.uid], userTeamsPayload)
+    } else { 
+      addData(['usersTeams',  user.uid], userTeamsPayload)
+    }
     toast({
       title: "Good Job",
       description: "You can start your journey",
