@@ -83,14 +83,14 @@ export default function Home() {
             for (let prop in obj) {
               if (amalan.includes(prop)) {
                 if (result[prop] === undefined) {
-                  result[prop] = obj[prop]
+                  result[prop] = parseInt(obj[prop])
                 } else {
-                  result[prop] += obj[prop]
+                  result[prop] += parseInt(obj[prop])
                 }
               }
             }
-            result.infaq = result.infaq/10000
           }
+          result.infaq = result.infaq/10000
           return Object.entries(result).map(([key, value]) => {
             return {
               name: key,
