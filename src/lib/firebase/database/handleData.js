@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase/firebase'
-import { doc, getDoc, getDocs, setDoc, updateDoc, collection, query, where, orderBy } from "firebase/firestore"
+import { doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, collection, query, where, orderBy } from "firebase/firestore"
 
 export async function addData(path, data) {
     const docRef = doc(db, ...path);
@@ -51,14 +51,6 @@ export async function updateData(path, data) {
 }
 
 export async function deleteData(path) {
-    let result = null
-    let error = null
-
-    try {
-        result = await remove(child(ref(db), path))
-    } catch (e) {
-        error = e
-    }
-
-    return { result, error }
+    const docRef = doc(db, ...path);
+    await deleteDoc(docRef)
 }
