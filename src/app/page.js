@@ -77,7 +77,7 @@ export default function Home() {
       }
       if(teams){
         const memberOfTeam = await readData(['teams', teams?.id])
-        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp', 'desc'])
+        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members).filter(key => memberOfTeam.members[key] === true)], ['exp', 'desc'])
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
         season.find((obj) => obj.endDate >= Timestamp.now())
