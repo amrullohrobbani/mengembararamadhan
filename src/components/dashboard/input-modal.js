@@ -83,7 +83,7 @@ export default function InputModal({className, refetchData, ...props}) {
           <DialogHeader>
             <DialogTitle>Add Submission</DialogTitle>
             <DialogDescription>
-              Make submission of the daily here. Click save when you're done.
+              Make submission of the daily here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
