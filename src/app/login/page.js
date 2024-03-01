@@ -44,7 +44,7 @@ export default function AuthenticationPage() {
               By clicking continue, you agree to our start your journey.
             </p>
             <p className="px-8 text-center text-xs text-muted-foreground">
-              In Case You can't login using default browser, try Incognito or Private Browser
+              In Case You cant login using default browser, try Incognito or Private Browser
             </p>
           </div>
         </div>
