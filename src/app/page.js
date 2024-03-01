@@ -20,7 +20,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
-import { readData, readDataQuery, addData, readDataQueryCustom } from '@/lib/firebase/database/handleData.js'
+import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
 import { level, rank, amalan, sumTotal } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
@@ -62,6 +62,12 @@ export default function Home() {
           photoURL: user.photoURL,
           lastLoginAt: user.metadata.lastSignInTime,
           exp: 0
+        })
+      }
+
+      if(!response.uid){
+        updateData(['usersTeams',  user.uid], {
+          uid: user.uid
         })
       }
 
