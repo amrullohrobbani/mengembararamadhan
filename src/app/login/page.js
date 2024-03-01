@@ -41,8 +41,10 @@ export default function AuthenticationPage() {
           <div className="flex w-full h-full flex-col justify-center space-y-6">
             <UserAuthForm />
             <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to support Palestine forever :)
-              .
+              By clicking continue, you agree to our start your journey.
+            </p>
+            <p className="px-8 text-center text-xs text-muted-foreground">
+              In Case You can't login using default browser, try Incognito or Private Browser
             </p>
           </div>
         </div>

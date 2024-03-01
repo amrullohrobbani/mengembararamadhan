@@ -230,10 +230,10 @@ export default function TeamSwitcher({ className, selectedGroup }) {
                         className="text-sm"
                       >
                         <Avatar className="mr-2 h-5 w-5">
-                        <AvatarFallback>{getInitials(selectedTeam?.name)}</AvatarFallback>
+                          <AvatarFallback>{getInitials(selectedTeam?.name)}</AvatarFallback>
                         </Avatar>
-                        <span className="whitespace-nowrap">{team.name} - {team.id}</span>
-                        {selectedTeam?.id === team.id?
+                        <span className="whitespace-nowrap">{team?.name} - {team?.id}</span>
+                        {selectedTeam?.id === team?.id?
                         <CheckIcon
                           className="ml-auto h-4 w-4"
                         />
