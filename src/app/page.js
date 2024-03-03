@@ -1,6 +1,7 @@
 'use client'
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import TeamSwitcher from "@/components/dashboard/team-switcher"
+import { ChartSwitcher } from "@/components/dashboard/chart-switcher"
 import { UserNav } from "@/components/dashboard/user-nav"
 import { Icons } from "@/components/icons"
 import {
@@ -17,7 +18,7 @@ import {
     AvatarFallback,
     AvatarImage,
   } from "@/components/ui/avatar"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
@@ -30,6 +31,7 @@ import RankIcon from "@/components/dashboard/rank-icon"
 import InputModal from "@/components/dashboard/input-modal" 
 import { where, Timestamp } from "firebase/firestore"
 import dayjs from "dayjs"
+import Link from "next/link"
 
 export default function Home() {
   const { user } = useAuthContext()
@@ -39,6 +41,7 @@ export default function Home() {
   const [topAmalan, setTopAmalan] = useState([])
   const [myProgress, setMyProgress] = useState([])
   const [teams, setTeams] = useState()
+  const [chart, setChart] = useState('')
 
   const getInitials = (inputString) => {
     if(!inputString) return 
@@ -49,6 +52,10 @@ export default function Home() {
 
   function selectedGroup(selectedTeams){
     return setTeams(selectedTeams)
+  }
+
+  function selectedChart(chart){
+    return setChart(chart)
   }
 
   const fetchData = useCallback(async () => {
@@ -115,19 +122,39 @@ export default function Home() {
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
-            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date))
+            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date), chart)
           }
         }).reverse())
       }
       setLoading(false)
       return response
-  }, [router, teams, user])
+  }, [router, teams, user, chart])
 
   useEffect(() => {
     if (user) {
       fetchData()
     }
-  }, [fetchData, user, teams])
+  }, [fetchData, user, teams, chart])
+
+  const targetReferenceLine = useMemo(() => {
+    const sumObjects = (array) => {
+      return array.reduce((accumulator, currentValue) => {
+        Object.keys(currentValue).forEach((property) => {
+          accumulator[property] = (parseInt(accumulator[property]) || 0) + (parseInt(currentValue[property]) || 0)
+        })
+        return accumulator
+      }, {})
+    }
+    
+    const player = {
+      target: sumObjects(players.map((obj) => obj.target).filter(item => item))
+    }
+    player.target.infaq = parseFloat((player.target.infaq/10000).toFixed(2))
+    if(chart && chart !== ''){
+      return parseFloat(player?.target[chart])
+    }
+    return player?.target? Object.values(player?.target)?.map((numb) => parseFloat(numb))?.reduce((a, b) => (a) + b, 0):0
+  }, [chart, players])
   
   return (
     <main className="min-h-screen h-auto md:h-screen p-5 py-24 md:p-24 no-scrollbar">
@@ -137,9 +164,11 @@ export default function Home() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="fixed left-0 top-0 flex w-full px-5 justify-between border-b border-gray-300 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90% pb-1 md:pb-6 pt-2 md:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit">
           <TeamSwitcher selectedGroup={selectedGroup} />
-          <div className="hidden md:block">
-            ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
-          </div>
+          <Link href={'/'}>
+            <div className="hidden md:block">
+              ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
+            </div>
+          </Link>
           <UserNav user={user}/>
         </div>
       </div>
@@ -250,7 +279,14 @@ export default function Home() {
             </div>
           </Card>
           <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Team Progress</div>
+            <div className="w-full text-center mt-5 mb-1 font-semibold relative">
+              <span>
+                Your Team Progress
+              </span>
+              <div className="absolute right-5 bottom-0">
+                <ChartSwitcher setChartValue={selectedChart} />
+              </div>
+            </div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -267,6 +303,7 @@ export default function Home() {
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
+                    <ReferenceLine y={targetReferenceLine} label={`Target ${targetReferenceLine}`} stroke="red" />
                     <YAxis />
                     <Tooltip />
                     <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />

@@ -1,9 +1,11 @@
 'use client'
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useMemo } from "react"
+import { ChartSwitcher } from "@/components/dashboard/chart-switcher"
 import TeamSwitcher from "@/components/dashboard/team-switcher"
 import { UserNav } from "@/components/dashboard/user-nav"
 import { Icons } from "@/components/icons"
 import _debounce from 'lodash/debounce'
+import Link from "next/link"
 import {
   Card
 } from "@/components/ui/card"
@@ -20,7 +22,7 @@ import {
     AvatarFallback,
     AvatarImage,
   } from "@/components/ui/avatar"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
@@ -44,6 +46,7 @@ export default function Home() {
   const [myProgress, setMyProgress] = useState([])
   const [listAmalan, setListAmalan] = useState([])
   const [teams, setTeams] = useState()
+  const [chart, setChart] = useState('')
 
   const getInitials = (inputString) => {
     if(!inputString) return 
@@ -54,6 +57,10 @@ export default function Home() {
 
   function selectedGroup(selectedTeams){
     return setTeams(selectedTeams)
+  }
+
+  function selectedChart(chart){
+    return setChart(chart)
   }
 
   const fetchData = useCallback(async () => {
@@ -75,7 +82,7 @@ export default function Home() {
       }
       if(teams){
         const memberOfTeam = await readData(['teams', teams?.id])
-        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp'])
+        const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp', 'desc'])
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
         season.find((obj) => obj.endDate >= Timestamp.now())
@@ -116,12 +123,23 @@ export default function Home() {
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
-            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date))
+            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date), chart)
           }
         }).reverse())
       }
       return response
-  }, [router, teams, user])
+  }, [router, teams, user, chart])
+
+  const targetReferenceLine = useMemo(() => {
+    const player = players?.[players.findIndex((obj) => obj.uid === user.uid)]
+    if(player?.target){
+      player.target.infaq = parseFloat((player.target.infaq/10000).toFixed(2))
+    }
+    if(chart && chart !== ''){
+      return parseFloat(player?.target[chart])
+    }
+    return player?.target? Object.values(player?.target)?.map((numb) => parseFloat(numb))?.reduce((a, b) => (a) + b, 0):0
+  }, [chart, players])
 
   useEffect(() => {
     if (user) {
@@ -129,7 +147,7 @@ export default function Home() {
       fetchData()
       setLoading(false)
     }
-  }, [fetchData, user])
+  }, [fetchData, user, chart])
 
   const handleInputTarget = useCallback(_debounce(
     (e) => {
@@ -149,9 +167,11 @@ export default function Home() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="fixed left-0 top-0 flex w-full px-5 justify-between border-b border-gray-300 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90% pb-1 md:pb-6 pt-2 md:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit">
           <TeamSwitcher selectedGroup={selectedGroup} />
-          <div className="hidden md:block">
-            ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
-          </div>
+          <Link href={'/'}>
+            <div className="hidden md:block">
+              ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
+            </div>
+          </Link>
           <UserNav user={user}/>
         </div>
       </div>
@@ -171,7 +191,7 @@ export default function Home() {
                       Your Rank
                     </div>
                     <div className="w-1/2 p-12 mx-auto">
-                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 1 &&
+                      {players.findIndex((obj) => obj.uid === user.uid) === 0 &&
                         <Image
                           priority
                           src={medal1}
@@ -179,7 +199,7 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 2 &&
+                      {players.findIndex((obj) => obj.uid === user.uid) === 1 &&
                         <Image
                           priority
                           src={medal2}
@@ -187,7 +207,7 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) +1 === 3 &&
+                      {players.findIndex((obj) => obj.uid === user.uid) === 2 &&
                         <Image
                           priority
                           src={medal3}
@@ -195,7 +215,7 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) +1 > 3 &&
+                      {players.findIndex((obj) => obj.uid === user.uid) +1 > 2 &&
                         <code className="text-5xl font-semibold italic">
                           {players.findIndex((obj) => obj.uid === user.uid) + 1}
                         </code>
@@ -249,7 +269,14 @@ export default function Home() {
 
         <div className="w-full flex flex-col gap-5">
           <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Progress</div>
+            <div className="w-full text-center mt-5 mb-1 font-semibold relative">
+              <span>
+                Your Progress
+              </span>
+              <div className="absolute right-5 bottom-0">
+                <ChartSwitcher setChartValue={selectedChart} />
+              </div>
+            </div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -266,6 +293,7 @@ export default function Home() {
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
+                    <ReferenceLine y={targetReferenceLine} label={`Target ${targetReferenceLine}`} stroke="red" />
                     <YAxis />
                     <Tooltip />
                     <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />

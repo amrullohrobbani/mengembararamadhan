@@ -29,7 +29,7 @@ export function generateRandomString() {
   return randomString;
 }
 
-export function sumTotal(convertedResult) {
+export function sumTotal(convertedResult, amal) {
   let total = 0
   let multipliers = {
     rawatib: 2,
@@ -39,8 +39,10 @@ export function sumTotal(convertedResult) {
     mengaji: 3
   }
 
+  const amals = amal && amal !== '' ?amalan.find((string) => string === amal):amalan
+
   for (let prop in convertedResult) {
-    if (multipliers[prop] && amalan.includes(prop)) {
+    if (multipliers[prop] && amals.includes(prop)) {
       total += convertedResult[prop] * multipliers[prop]
     }
   }
