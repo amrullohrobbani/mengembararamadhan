@@ -100,7 +100,8 @@ export default function Home() {
             return {
               name: key,
               value: value,
-              avg: value/amalanList?.length
+              avg: value/amalanList?.length,
+              target: players?.[players.findIndex((obj) => obj.uid === user.uid)]?.target?.[key]
             }
           }).sort((a, b) => b.value - a.value)
         })
@@ -231,7 +232,7 @@ export default function Home() {
                   <TableBody>
                     {listAmalan?.map((player, index) => (
                       <TableRow key={index}>
-                        <TableCell>{dayjs(player.date).format('dddd, DD MM YYYY')}</TableCell>
+                        <TableCell className="whitespace-nowrap">{dayjs(player.dateSubmitted).format('dddd, DD MMM YYYY')}</TableCell>
                         <TableCell>{player.rawatib}</TableCell>
                         <TableCell>{player.dhuha}</TableCell>
                         <TableCell>{player.mengaji}</TableCell>
