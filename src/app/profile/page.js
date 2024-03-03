@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import TeamSwitcher from "@/components/dashboard/team-switcher"
 import { UserNav } from "@/components/dashboard/user-nav"
 import { Icons } from "@/components/icons"
+import _debounce from 'lodash/debounce'
 import {
   Card
 } from "@/components/ui/card"
@@ -22,7 +23,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
-import { readData, readDataQuery, addData, readDataQueryCustom } from '@/lib/firebase/database/handleData.js'
+import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
 import { level, rank, amalan, sumTotal, formatCurrency } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
@@ -30,6 +31,7 @@ import medal2 from '@/assets/image/t_common_icon_no_2.webp'
 import medal3 from '@/assets/image/t_common_icon_no_3.webp'
 import RankIcon from "@/components/dashboard/rank-icon"
 import InputModal from "@/components/dashboard/input-modal" 
+import { Input } from "@/components/ui/input"
 import { where, Timestamp } from "firebase/firestore"
 import dayjs from "dayjs"
 
@@ -79,7 +81,6 @@ export default function Home() {
         season.find((obj) => obj.endDate >= Timestamp.now())
         const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', '==', user.uid)])
         setListAmalan(amalanList)
-        console.log(amalanList)
         setTopAmalan(() => {
           let result = {}
           for (let key in amalanList) {
@@ -87,18 +88,19 @@ export default function Home() {
             for (let prop in obj) {
               if (amalan.includes(prop)) {
                 if (result[prop] === undefined) {
-                  result[prop] = obj[prop]
+                  result[prop] = parseFloat(obj[prop])
                 } else {
-                  result[prop] += obj[prop]
+                  result[prop] += parseFloat(obj[prop])
                 }
               }
             }
-            result.infaq = result.infaq/10000
           }
+          result.infaq = result.infaq/10000
           return Object.entries(result).map(([key, value]) => {
             return {
               name: key,
-              value: value
+              value: value,
+              avg: value/amalanList?.length
             }
           }).sort((a, b) => b.value - a.value)
         })
@@ -127,6 +129,16 @@ export default function Home() {
       setLoading(false)
     }
   }, [fetchData, user])
+
+  const handleInputTarget = useCallback(_debounce(
+    (e) => {
+      const playerData = players?.[players.findIndex((obj) => obj.uid === user.uid)]?.target
+      playerData[e.target.name.split('-').pop()] = e.target.value
+      updateData(['users',  user.uid],{
+        target: playerData
+      })
+    }
+  , 500), [])
   
   return (
     <main className="min-h-screen h-auto md:h-screen p-5 py-24 md:p-24 no-scrollbar">
@@ -192,8 +204,8 @@ export default function Home() {
                   <div className="flex flex-col justify-center">
                     <div className="grid grid-cols-2 justify-center items-center gap-5">
                       <Avatar className="h-32 w-32 mb-1">
-                        <AvatarImage src={players?.[0]?.photoURL} alt="PP" />
-                        <AvatarFallback>{getInitials(players?.[0]?.displayName)}</AvatarFallback>
+                        <AvatarImage src={players?.[players.findIndex((obj) => obj.uid === user.uid)]?.photoURL} alt="PP" />
+                        <AvatarFallback>{getInitials(players?.[players.findIndex((obj) => obj.uid === user.uid)]?.displayName)}</AvatarFallback>
                       </Avatar>
                       <div className="relative w-full h-full">
                         <RankIcon rank={rank(level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp))} />
@@ -223,7 +235,7 @@ export default function Home() {
                         <TableCell>{player.rawatib}</TableCell>
                         <TableCell>{player.dhuha}</TableCell>
                         <TableCell>{player.mengaji}</TableCell>
-                        <TableCell>Rp. {formatCurrency(player.infaq)}</TableCell>
+                        <TableCell className="whitespace-nowrap">Rp. {formatCurrency(player.infaq)}</TableCell>
                         <TableCell>{player.tahajud}</TableCell>                        
                       </TableRow>
                     ))}
@@ -266,12 +278,25 @@ export default function Home() {
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead></TableHead>
+                      <TableHead></TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Average</TableHead>
+                      <TableHead>Target</TableHead>
+                    </TableRow>
+                  </TableHeader>
                   <TableBody>
                   {topAmalan?.map((obj, index) => (
                       <TableRow key={index}>
                         <TableCell>{ index + 1 }</TableCell>
                         <TableCell className="capitalize">{obj.name}</TableCell>
                         <TableCell>{obj.value}</TableCell>
+                        <TableCell>{obj.avg}</TableCell>
+                        <TableCell className="w-1/3" >
+                          <Input name={`target-${obj.name}`}  id={`target-${obj.name}`} value={obj.target} onInput={handleInputTarget} />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

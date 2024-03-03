@@ -89,9 +89,9 @@ export default function Home() {
             for (let prop in obj) {
               if (amalan.includes(prop)) {
                 if (result[prop] === undefined) {
-                  result[prop] = parseInt(obj[prop])
+                  result[prop] = parseFloat(obj[prop])
                 } else {
-                  result[prop] += parseInt(obj[prop])
+                  result[prop] += parseFloat(obj[prop])
                 }
               }
             }
