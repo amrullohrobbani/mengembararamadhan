@@ -161,8 +161,8 @@ export default function Home() {
       {loading ? <div className='z-[100] fixed top-0 left-0 flex h-screen w-screen justify-center items-center bg-white/50'>
         <Icons.spinner className="mr-2 h-16 w-16 animate-spin" />
       </div> : undefined}
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <div className="fixed left-0 top-0 flex w-full px-5 justify-between border-b border-gray-300 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90% pb-1 md:pb-6 pt-2 md:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit">
+      <div className="z-50 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+        <div className="absolute md:fixed left-0 top-0 flex w-full px-5 justify-between border-b border-gray-300 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90% pb-1 md:pb-6 pt-2 md:pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit">
           <TeamSwitcher selectedGroup={selectedGroup} />
           <Link href={'/'}>
             <div className="hidden md:block">
@@ -279,8 +279,8 @@ export default function Home() {
             </div>
           </Card>
           <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold relative">
-              <span>
+            <div className="w-full text-left md:text-center mt-5 mb-1 font-semibold relative">
+              <span className="ml-5 md:ml-0 text-sm md:text-base">
                 Your Team Progress
               </span>
               <div className="absolute right-5 bottom-0">
