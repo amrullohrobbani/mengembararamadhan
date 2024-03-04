@@ -151,10 +151,10 @@ export default function Home() {
 
   const handleInputTarget = useCallback(_debounce(
     (e) => {
-      const playerData = players?.[players.findIndex((obj) => obj.uid === user.uid)]?.target || {}
-      playerData[e.target.name.split('-').pop()] = e.target.value
+      // const playerData = players?.[players.findIndex((obj) => obj.uid === user.uid)]?.target || {}
+      // playerData[e.target.name.split('-').pop()] = e.target.value
       updateData(['users',  user.uid],{
-        target: playerData
+        [`target.${e.target.name.split('-').pop()}`]: e.target.value
       })
     }
   , 500), [])
