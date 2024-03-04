@@ -21,11 +21,17 @@ export const AuthContextProvider = ({
 
     React.useEffect(() => {
         setLoading(true)
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user)
-                router.push('/')
+        const unsubscribe = onAuthStateChanged(auth, (authenticatedUser) => {
+            if (authenticatedUser) {
+                if(!user){
+                    setUser(authenticatedUser)
+                    router.push('/')
+                }
             } else {
+                if(window.location.href.includes('about-dev')){
+                    setLoading(false)
+                    return
+                }
                 setUser(null)
                 router.push('/login')
             }
