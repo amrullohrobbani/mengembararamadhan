@@ -41,7 +41,7 @@ export default function Home() {
   const { user } = useAuthContext()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [players, setPlayers] = useState([])
+  const [players, setPlayers] = useState()
   const [topAmalan, setTopAmalan] = useState([])
   const [myProgress, setMyProgress] = useState([])
   const [listAmalan, setListAmalan] = useState([])
@@ -102,13 +102,15 @@ export default function Home() {
               }
             }
           }
-          result.infaq = result.infaq/10000
+          if(result.infaq){
+            result.infaq = result.infaq/10000
+          }
           return Object.entries(result).map(([key, value]) => {
             return {
               name: key,
               value: value,
               avg: value/amalanList?.length,
-              target: players?.[players.findIndex((obj) => obj.uid === user.uid)]?.target?.[key]
+              target: playerList?.[playerList?.findIndex((obj) => obj.uid === user.uid)]?.target?.[key]
             }
           }).sort((a, b) => b.value - a.value)
         })
@@ -131,7 +133,7 @@ export default function Home() {
   }, [router, teams, user, chart])
 
   const targetReferenceLine = useMemo(() => {
-    const player = players?.[players.findIndex((obj) => obj.uid === user.uid)]
+    const player = players?.[players?.findIndex((obj) => obj.uid === user.uid)]
     if(player?.target){
       player.target.infaq = parseFloat((player.target.infaq/10000).toFixed(2))
     }
@@ -147,7 +149,7 @@ export default function Home() {
       fetchData()
       setLoading(false)
     }
-  }, [fetchData, user, chart])
+  }, [fetchData, user, chart, players?.length])
 
   const handleInputTarget = useCallback(_debounce(
     (e) => {
@@ -176,7 +178,7 @@ export default function Home() {
       
       <InputModal refetchData={fetchData} />
       <div>
-        <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Profile</h2>
+        <h2 className="my-0 md:my-5 text-3xl font-bold tracking-tight">Personal</h2>
       </div>
       <div className="w-full h-full flex flex-col md:flex-row gap-5">
         <div className="w-full">
@@ -189,7 +191,7 @@ export default function Home() {
                       Your Rank
                     </div>
                     <div className="w-1/2 p-12 mx-auto">
-                      {players.findIndex((obj) => obj.uid === user.uid) === 0 &&
+                      {players?.findIndex((obj) => obj.uid === user.uid) === 0 &&
                         <Image
                           priority
                           src={medal1}
@@ -197,7 +199,7 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) === 1 &&
+                      {players?.findIndex((obj) => obj.uid === user.uid) === 1 &&
                         <Image
                           priority
                           src={medal2}
@@ -205,7 +207,7 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) === 2 &&
+                      {players?.findIndex((obj) => obj.uid === user.uid) === 2 &&
                         <Image
                           priority
                           src={medal3}
@@ -213,9 +215,9 @@ export default function Home() {
                           className="w-full"
                         />
                       }
-                      {players.findIndex((obj) => obj.uid === user.uid) +1 > 2 &&
+                      {players?.findIndex((obj) => obj.uid === user.uid) +1 > 2 &&
                         <code className="text-5xl font-semibold italic">
-                          {players.findIndex((obj) => obj.uid === user.uid) + 1}
+                          {players?.findIndex((obj) => obj.uid === user.uid) + 1}
                         </code>
                       }
                     </div>
@@ -223,14 +225,14 @@ export default function Home() {
                   <div className="flex flex-col justify-center">
                     <div className="grid grid-cols-2 justify-center items-center gap-5">
                       <Avatar className="h-32 w-32 mb-1">
-                        <AvatarImage src={players?.[players.findIndex((obj) => obj.uid === user.uid)]?.photoURL} alt="PP" />
-                        <AvatarFallback>{getInitials(players?.[players.findIndex((obj) => obj.uid === user.uid)]?.displayName)}</AvatarFallback>
+                        <AvatarImage src={players?.[players?.findIndex((obj) => obj.uid === user.uid)]?.photoURL} alt="PP" />
+                        <AvatarFallback>{getInitials(players?.[players?.findIndex((obj) => obj.uid === user.uid)]?.displayName)}</AvatarFallback>
                       </Avatar>
                       <div className="relative w-full h-full">
-                        <RankIcon rank={rank(level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp))} />
+                        <RankIcon rank={rank(level(players?.[players?.findIndex((obj) => obj.uid === user.uid)]?.exp))} />
                       </div>
                     </div>
-                    <div className="text-center mt-5 font-semibold">Level {level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp)} {rank(level(players[players.findIndex((obj) => obj.uid === user.uid)]?.exp))}</div>
+                    <div className="text-center mt-5 font-semibold">Level {level(players?.[players?.findIndex((obj) => obj.uid === user.uid)]?.exp)} {rank(level(players?.[players?.findIndex((obj) => obj.uid === user.uid)]?.exp))}</div>
                   </div>
               </div>
             </div>

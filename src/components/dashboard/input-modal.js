@@ -72,7 +72,7 @@ export default function InputModal({className, refetchData, ...props}) {
   return (
     <Dialog className={className} {...props} open={modal} onOpenChange={setModal}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="fixed bottom-7 right-7 hover:bg-transparent">
+        <Button variant="ghost" className="fixed bottom-7 right-7 hover:bg-transparent bg-transparent ring-transparent border-transparent">
           <div className="rounded-full bg-gradient-to-br from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% p-5">
             <Icons.plus className="h-6 w-6 text-white" />
           </div>

@@ -35,6 +35,7 @@ import Link from "next/link"
 
 export function UserNav({user}) {
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
+  const [selectedTeam, setSelectedTeam] = useState()
   const [loading, setLoading]= useState(false)
   const { toast } = useToast()
 
@@ -101,12 +102,12 @@ export function UserNav({user}) {
           <DropdownMenuGroup>
             <Link href="/profile">
               <DropdownMenuItem>
-                Profile
+                Personal
               </DropdownMenuItem>
             </Link>
-            <DialogTrigger asChild>
+            {/* <DialogTrigger asChild>
               <DropdownMenuItem>New Team</DropdownMenuItem>
-            </DialogTrigger>
+            </DialogTrigger> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={signOut}>

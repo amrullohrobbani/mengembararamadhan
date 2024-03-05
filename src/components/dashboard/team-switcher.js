@@ -230,7 +230,7 @@ export default function TeamSwitcher({ className, selectedGroup }) {
                         className="text-sm"
                       >
                         <Avatar className="mr-2 h-5 w-5">
-                          <AvatarFallback>{getInitials(selectedTeam?.name)}</AvatarFallback>
+                          <AvatarFallback>{getInitials(team?.name)}</AvatarFallback>
                         </Avatar>
                         <span className="whitespace-nowrap">{team?.name} - {team?.id}</span>
                         {selectedTeam?.id === team?.id?

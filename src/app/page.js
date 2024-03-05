@@ -103,7 +103,9 @@ export default function Home() {
               }
             }
           }
-          result.infaq = result.infaq/10000
+          if(result.infaq){
+            result.infaq = result.infaq/10000
+          }
           return Object.entries(result).map(([key, value]) => {
             return {
               name: key,
@@ -261,7 +263,7 @@ export default function Home() {
 
         <div className="w-full flex flex-col gap-5">
           <Card className="flex flex-col w-full h-1/2 bg-gradient-to-br from-indigo-500/25 from-10% via-sky-500/25 via-30% to-emerald-500/25 to-90%">
-            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Top Daily</div>
+            <div className="w-full text-center mt-5 mb-1 font-semibold">Your Team Top Daily</div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <Table>

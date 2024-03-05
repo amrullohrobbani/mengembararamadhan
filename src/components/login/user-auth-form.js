@@ -12,6 +12,12 @@ export function UserAuthForm({ className, ...props }) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { user } = useAuthContext()
+
+  useEffect(() => {
+    if(user){
+      router.push('/')
+    }
+  })
   
   async function handleSignIn() {
     setIsLoading(true)

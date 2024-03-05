@@ -23,10 +23,7 @@ export const AuthContextProvider = ({
         setLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (authenticatedUser) => {
             if (authenticatedUser) {
-                if(!user){
-                    setUser(authenticatedUser)
-                    router.push('/')
-                }
+                setUser(authenticatedUser)
             } else {
                 if(window.location.href.includes('about-dev')){
                     setLoading(false)
