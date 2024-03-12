@@ -92,8 +92,9 @@ export default function TeamSwitcher({ className, selectedGroup }) {
   }, [fetchData, user?.uid])
 
   React.useEffect(() => {
-    setSelectedTeam(groups[0]?.teams?.[0])
-    selectedGroup(groups[0]?.teams?.[0])
+    const teamId = sessionStorage.getItem('team-id') || groups[0]?.teams?.[0].id
+    setSelectedTeam(groups[0]?.teams?.[groups[0]?.teams?.findIndex((obj) => obj.id === teamId)])
+    selectedGroup(groups[0]?.teams?.[groups[0]?.teams?.findIndex((obj) => obj.id === teamId)])
   }, [groups])
 
   const handleCreateNew = async (formData) => {
@@ -224,7 +225,8 @@ export default function TeamSwitcher({ className, selectedGroup }) {
                         key={indexes}
                         onSelect={() => {
                           setSelectedTeam(team)
-                          selectedGroup(team) 
+                          selectedGroup(team)
+                          sessionStorage.setItem('team-id', team.id) 
                           setOpen(false)
                         }}
                         className="text-sm"
