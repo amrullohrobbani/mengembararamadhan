@@ -124,7 +124,7 @@ export default function Home() {
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
-            value: sumTotal(amalanProgress.find((obj) => obj.dateSubmitted === date), chart)
+            value: amalanProgress.filter((obj) => obj.dateSubmitted === date)?.map((obj) => sumTotal(obj, chart))?.reduce((a, b) => (a) + b, 0)
           }
         }).reverse())
       }

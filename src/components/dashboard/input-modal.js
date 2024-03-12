@@ -95,6 +95,7 @@ export default function InputModal({className, refetchData, ...props}) {
                 id="rawatib"
                 name="rawatib"
                 type="number"
+                step="0.1"
                 placeholder="Raka'at"
                 className="col-span-3"
                 required
@@ -108,6 +109,7 @@ export default function InputModal({className, refetchData, ...props}) {
                 id="dhuha"
                 name="dhuha"
                 type="number"
+                step="0.1"
                 placeholder="Raka'at"
                 className="col-span-3"
                 required
@@ -121,6 +123,7 @@ export default function InputModal({className, refetchData, ...props}) {
                 id="infaq"
                 name="infaq"
                 type="number"
+                step="0.1"
                 placeholder="/Rp 10.000"
                 className="col-span-3"
                 required
@@ -134,6 +137,7 @@ export default function InputModal({className, refetchData, ...props}) {
                 id="tahajud"
                 name="tahajud"
                 type="number"
+                step="0.1"
                 placeholder="Raka'at"
                 className="col-span-3"
                 required
@@ -147,6 +151,8 @@ export default function InputModal({className, refetchData, ...props}) {
                 id="mengaji"
                 name="mengaji"
                 type="number"
+                step="0.1"
+                step="0.1"
                 placeholder="Juz"
                 className="col-span-3"
                 required
