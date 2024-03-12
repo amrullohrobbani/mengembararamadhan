@@ -305,7 +305,7 @@ export default function Home() {
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
-                    <ReferenceLine y={targetReferenceLine} label={`Target ${targetReferenceLine}`} stroke="red" />
+                    <ReferenceLine y={targetReferenceLine} label={`Target ${targetReferenceLine}`} stroke="red" alwaysShow />
                     <YAxis />
                     <Tooltip />
                     <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
