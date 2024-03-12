@@ -38,16 +38,16 @@ export default function InputModal({className, refetchData, ...props}) {
     }
     try {
       const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
-      season.find((obj) => obj.endDate >= Timestamp.now())
+      const selectedSeason = season.find((obj) => obj.endDate >= Timestamp.now())
       const currentUser = await readData(['users',  user.uid])
       const payload = {
         ...Object.fromEntries(formData),
-        seasonid: season?.[0]?.id,
+        seasonid: selectedSeason?.id,
         uid: user.uid,
         timeSubmitted: Timestamp.now(),
         dateSubmitted: dayjs().format('YYYY-MM-DD')
       }
-      addData(['tasks', dayjs().format('YYYY-MM-DD')], payload)
+      addData(['tasks', `${dayjs().format('YYYY-MM-DD')}-${user.uid}`], payload)
       updateData(['users',  user.uid], {
         exp: currentUser.exp + sumTotal({...Object.fromEntries(formData)})
       })

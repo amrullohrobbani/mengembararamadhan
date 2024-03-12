@@ -87,13 +87,12 @@ export default function Home() {
         const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members).filter(key => memberOfTeam.members[key] === true)], ['exp', 'desc'])
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
-        season.find((obj) => obj.endDate >= Timestamp.now())
-        const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', 'in', playerList.map((obj) => obj.id))])
+        const amalanList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
         setTopAmalan(() => {
           let result = {}
           for (let key in amalanList) {
             let obj = amalanList[key]
-            for (let prop in obj) {
+            for (let prop in obj) { 
               if (amalan.includes(prop)) {
                 if (result[prop] === undefined) {
                   result[prop] = parseFloat(obj[prop])
@@ -120,11 +119,12 @@ export default function Home() {
           const formattedDate = currentDate.format('YYYY-MM-DD');
           dateArray.push(formattedDate);
         }
-        const amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', 'in', playerList.map((obj) => obj.id))])
+        const amalanProgressList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
+        const amalanProgress = amalanProgressList.filter((obj) => dateArray.includes(obj.dateSubmitted))
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
-            value: sumTotal(amalanProgressList.find((obj) => obj.dateSubmitted === date), chart)
+            value: sumTotal(amalanProgress.find((obj) => obj.dateSubmitted === date), chart)
           }
         }).reverse())
       }
