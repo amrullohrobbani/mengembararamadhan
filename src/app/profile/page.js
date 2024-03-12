@@ -153,6 +153,7 @@ export default function Home() {
 
   const handleInputTarget = useCallback(_debounce(
     (e) => {
+      e.preventDefault()
       updateData(['users',  user.uid],{
         [`target.${e.target.name.split('-').pop()}`]: e.target.value
       })
@@ -324,7 +325,7 @@ export default function Home() {
                         <TableCell>{obj.value}</TableCell>
                         <TableCell>{obj.avg}</TableCell>
                         <TableCell className="w-1/3" >
-                          <Input name={`target-${obj.name}`}  id={`target-${obj.name}`} value={obj.target} onInput={handleInputTarget} />
+                          <Input name={`target-${obj.name}`}  id={`target-${obj.name}`} defaultValue={obj.target} onInput={handleInputTarget} />
                         </TableCell>
                       </TableRow>
                     ))}
