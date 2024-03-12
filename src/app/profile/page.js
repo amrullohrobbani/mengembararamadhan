@@ -86,7 +86,7 @@ export default function Home() {
         setPlayers(playerList)
         const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
         season.find((obj) => obj.endDate >= Timestamp.now())
-        const amalanList = await readDataQueryCustom('tasks', [where('seasonid', '==', season?.[0]?.id), where('uid', '==', user.uid)])
+        const amalanList = await readDataQueryCustom('tasks', [where('uid', '==', user.uid)])
         setListAmalan(amalanList)
         setTopAmalan(() => {
           let result = {}
