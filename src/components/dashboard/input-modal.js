@@ -152,7 +152,6 @@ export default function InputModal({className, refetchData, ...props}) {
                 name="mengaji"
                 type="number"
                 step="0.1"
-                step="0.1"
                 placeholder="Juz"
                 className="col-span-3"
                 required
