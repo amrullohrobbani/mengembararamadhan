@@ -27,7 +27,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, R
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
-import { level, rank, amalan, sumTotal, formatCurrency } from '@/lib/utils'
+import { level, rank, amalan, sumTotal, formatCurrency, amalanSatuan } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
 import medal2 from '@/assets/image/t_common_icon_no_2.webp'
@@ -350,8 +350,8 @@ export default function Home() {
                       <TableRow key={index}>
                         <TableCell>{ index + 1 }</TableCell>
                         <TableCell className="capitalize">{obj.name}</TableCell>
-                        <TableCell>{obj.value}</TableCell>
-                        <TableCell>{obj.avg}</TableCell>
+                        <TableCell>{obj.value} {amalanSatuan[obj.name]}</TableCell>
+                        <TableCell>{obj.avg} {amalanSatuan[obj.name]}</TableCell>
                         <TableCell className="w-1/3" >
                           <Input name={`target-${obj.name}`}  id={`target-${obj.name}`} defaultValue={obj.target} onInput={handleInputTarget} />
                         </TableCell>

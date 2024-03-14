@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card"
 import {
   Table,
+  TableHeader,
+  TableHead,
   TableBody,
   TableCell,
   TableRow,
@@ -26,7 +28,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, R
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from 'next/navigation'
 import { readData, readDataQuery, addData, readDataQueryCustom, updateData } from '@/lib/firebase/database/handleData.js'
-import { level, rank, amalan, sumTotal } from '@/lib/utils'
+import { level, rank, amalan, sumTotal, formatCurrency, amalanSatuan } from '@/lib/utils'
 import Image from 'next/image'
 import medal1 from '@/assets/image/t_common_icon_no_1.webp'
 import medal2 from '@/assets/image/t_common_icon_no_2.webp'
@@ -129,7 +131,8 @@ export default function Home() {
           return Object.entries(result).map(([key, value]) => {
             return {
               name: key,
-              value: value
+              value: value,
+              avg: key === 'infaq'? parseFloat((value/(amalanList?.length)).toFixed(2)) *10000: parseFloat((value/(amalanList?.length)).toFixed(2))
             }
           }).sort((a, b) => b.value - a.value)
         })
@@ -306,12 +309,21 @@ export default function Home() {
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
               <div className="h-full">
                 <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead ></TableHead>
+                      <TableHead>Amal</TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Average</TableHead>
+                    </TableRow>
+                  </TableHeader>
                   <TableBody>
                   {topAmalan?.map((obj, index) => (
                       <TableRow key={index}>
                         <TableCell>{ index + 1 }</TableCell>
                         <TableCell className="capitalize">{obj.name}</TableCell>
-                        <TableCell>{obj.value}</TableCell>
+                        <TableCell>{obj.value} {amalanSatuan[obj.name]}</TableCell>
+                        <TableCell>{obj.name === 'infaq'?`Rp. ${formatCurrency(obj.avg)}`:obj.avg} {amalanSatuan[obj.name]}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

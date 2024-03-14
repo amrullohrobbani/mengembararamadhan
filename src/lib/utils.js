@@ -8,6 +8,14 @@ export function cn(...inputs) {
 
 export const amalan = ['rawatib', 'dhuha', 'mengaji', 'tahajud', 'infaq']
 
+export const amalanSatuan = {
+  rawatib: "Raka'at",
+  dhuha: "Raka'at",
+  tahajud: "Raka'at",
+  infaq: "",
+  mengaji: "Juz"
+}
+
 export function formatCurrency(value) {
   if (value >= 0) {
     value = value.toString()
