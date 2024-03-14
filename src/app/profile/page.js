@@ -128,7 +128,7 @@ export default function Home() {
             return {
               name: key,
               value: value,
-              avg: value/amalanList?.length,
+              avg: parseFloat((value/amalanList?.length).toFixed(2)) || 0,
               target: playerList?.[playerList?.findIndex((obj) => obj.uid === user.uid)]?.target?.[key]
             }
           }).sort((a, b) => b.value - a.value)
