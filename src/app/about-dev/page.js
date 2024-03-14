@@ -5,10 +5,10 @@ import { AspectRatio } from "@/components/ui/aspect-ratio"
 export default function AboutDevPage() {
     return (
         <>
-            <div className="bg-black h-auto md:w-screen">
-                <div className="relative isolate px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2">
+            <div className="bg-black h-screen w-screen">
+                <div className="relative px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2">
                     <div className="w-full px-36 relative">
-                        <AspectRatio ratio={3/5} className="relative">
+                        <AspectRatio ratio={3/5} className="relative h-screen">
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(19% 65% 32% 23%)"}} />
                             <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(20% 66% 33% 24%)"}} className="absolute object-contain top-0" fill />
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(6% 36% 23% 36%)"}} />

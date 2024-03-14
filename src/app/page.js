@@ -83,7 +83,7 @@ export default function Home() {
         })
       }
 
-      if(!response.uid){
+      if(!response?.uid){
         updateData(['usersTeams',  user.uid], {
           uid: user.uid
         })

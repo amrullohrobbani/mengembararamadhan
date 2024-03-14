@@ -92,7 +92,7 @@ export default function TeamSwitcher({ className, selectedGroup }) {
   }, [fetchData, user?.uid])
 
   React.useEffect(() => {
-    const teamId = sessionStorage.getItem('team-id') || groups[0]?.teams?.[0].id
+    const teamId = sessionStorage.getItem('team-id') || groups[0]?.teams?.[0]?.id
     setSelectedTeam(groups[0]?.teams?.[groups[0]?.teams?.findIndex((obj) => obj.id === teamId)])
     selectedGroup(groups[0]?.teams?.[groups[0]?.teams?.findIndex((obj) => obj.id === teamId)])
   }, [groups])
