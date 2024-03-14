@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState, useMemo } from "react"
 import { ChartSwitcher } from "@/components/dashboard/chart-switcher"
 import TeamSwitcher from "@/components/dashboard/team-switcher"
+import SeasonSwitcher from "@/components/dashboard/season-switcher"
 import { UserNav } from "@/components/dashboard/user-nav"
 import { Icons } from "@/components/icons"
 import _debounce from 'lodash/debounce'
@@ -47,6 +48,7 @@ export default function Home() {
   const [listAmalan, setListAmalan] = useState([])
   const [teams, setTeams] = useState()
   const [chart, setChart] = useState('')
+  const [season, setSeason] = useState('')
 
   const getInitials = (inputString) => {
     if(!inputString) return 
@@ -57,6 +59,10 @@ export default function Home() {
 
   function selectedGroup(selectedTeams){
     return setTeams(selectedTeams)
+  }
+
+  function selectedSeason(selectedSeason){
+    return setSeason(selectedSeason)
   }
 
   function selectedChart(chart){
@@ -84,9 +90,22 @@ export default function Home() {
         const memberOfTeam = await readData(['teams', teams?.id])
         const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members)], ['exp', 'desc'])
         setPlayers(playerList)
-        const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
-        season.find((obj) => obj.endDate >= Timestamp.now())
-        const amalanList = await readDataQueryCustom('tasks', [where('uid', '==', user.uid)])
+        let amalanList = await readDataQueryCustom('tasks', [where('uid', '==', user.uid)])
+        let amalansList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
+        if(season) {
+          amalanList = amalanList.filter((obj) => obj.seasonid === season)
+          amalansList = amalansList.filter((obj) => obj.seasonid === season)
+          const playerL = playerList.map((player) => {
+            return {
+              ...player,
+              seasonExp: amalansList.filter((obj) => obj.uid === player.uid)?.map((obj) => sumTotal(obj, chart))?.reduce((a, b) => (a) + b, 0)
+            }
+          })
+          .sort((a, b) => {
+            return b.seasonExp - a.seasonExp;
+          })
+          setPlayers(playerL)
+        }
         setListAmalan(amalanList)
         setTopAmalan(() => {
           let result = {}
@@ -121,7 +140,13 @@ export default function Home() {
           const formattedDate = currentDate.format('YYYY-MM-DD');
           dateArray.push(formattedDate);
         }
-        const amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', '==', user.uid)])
+        let amalanProgressList = await readDataQueryCustom('tasks', [where('dateSubmitted', 'in', dateArray), where('uid', '==', user.uid)])
+        amalanProgressList = amalanProgressList.filter((obj) => {
+          if(season){
+            return obj.seasonid === season
+          }
+          return obj
+        })
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
@@ -130,7 +155,7 @@ export default function Home() {
         }).reverse())
       }
       return response
-  }, [router, teams, user, chart])
+  }, [router, teams, user, chart, season])
 
   const targetReferenceLine = useMemo(() => {
     const player = players?.[players?.findIndex((obj) => obj.uid === user.uid)]
@@ -141,7 +166,7 @@ export default function Home() {
       return parseFloat(player?.target[chart])
     }
     return player?.target? Object.values(player?.target)?.map((numb) => parseFloat(numb))?.reduce((a, b) => (a) + b, 0):0
-  }, [chart, players])
+  }, [chart, players, season])
 
   useEffect(() => {
     if (user) {
@@ -173,7 +198,10 @@ export default function Home() {
               ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
             </div>
           </Link>
-          <UserNav user={user}/>
+          <div className="flex gap-4">
+            <SeasonSwitcher selectedSeason={selectedSeason} />
+            <UserNav user={user}/>
+          </div>
         </div>
       </div>
       

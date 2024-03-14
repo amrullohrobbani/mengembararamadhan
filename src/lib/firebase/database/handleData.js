@@ -14,6 +14,18 @@ export async function readData(path) {
     return docSnap.data()
 }
 
+export async function readDatas(path) {
+    if(!path?.[0]) return
+    const docRef = collection(db, ...path)
+    const docSnap = await getDocs(docRef)
+    let result= []
+    docSnap.forEach((doc) => result.push({
+        id: doc.id,
+        ...doc.data()
+    }))
+    return result
+}
+
 export async function readDataQuery(path, params, order) {
     const docRef = collection(db, path)
     if(!params[0]) return

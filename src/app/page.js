@@ -1,6 +1,10 @@
 'use client'
+import {
+  CheckIcon,
+} from "@radix-ui/react-icons"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import TeamSwitcher from "@/components/dashboard/team-switcher"
+import SeasonSwitcher from "@/components/dashboard/season-switcher"
 import { ChartSwitcher } from "@/components/dashboard/chart-switcher"
 import { UserNav } from "@/components/dashboard/user-nav"
 import { Icons } from "@/components/icons"
@@ -42,6 +46,7 @@ export default function Home() {
   const [myProgress, setMyProgress] = useState([])
   const [teams, setTeams] = useState()
   const [chart, setChart] = useState('')
+  const [season, setSeason] = useState('')
 
   const getInitials = (inputString) => {
     if(!inputString) return 
@@ -52,6 +57,10 @@ export default function Home() {
 
   function selectedGroup(selectedTeams){
     return setTeams(selectedTeams)
+  }
+
+  function selectedSeason(selectedSeason){
+    return setSeason(selectedSeason)
   }
 
   function selectedChart(chart){
@@ -86,8 +95,20 @@ export default function Home() {
         const memberOfTeam = await readData(['teams', teams?.id])
         const playerList = await readDataQuery('users', ['uid', 'in', Object.keys(memberOfTeam.members).filter(key => memberOfTeam.members[key] === true)], ['exp', 'desc'])
         setPlayers(playerList)
-        const season = await readDataQueryCustom('season', [where('startDate', '<=', Timestamp.now())])
-        const amalanList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
+        let amalanList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
+        if(season) {
+          amalanList = amalanList.filter((obj) => obj.seasonid === season)
+          const playerL = playerList.map((player) => {
+            return {
+              ...player,
+              seasonExp: amalanList.filter((obj) => obj.uid === player.uid)?.map((obj) => sumTotal(obj, chart))?.reduce((a, b) => (a) + b, 0)
+            }
+          })
+          .sort((a, b) => {
+            return b.seasonExp - a.seasonExp;
+          })
+          setPlayers(playerL)
+        }
         setTopAmalan(() => {
           let result = {}
           for (let key in amalanList) {
@@ -120,7 +141,12 @@ export default function Home() {
           dateArray.push(formattedDate);
         }
         const amalanProgressList = await readDataQueryCustom('tasks', [where('uid', 'in', playerList.map((obj) => obj.id))])
-        const amalanProgress = amalanProgressList.filter((obj) => dateArray.includes(obj.dateSubmitted))
+        const amalanProgress = amalanProgressList.filter((obj) => dateArray.includes(obj.dateSubmitted)).filter((obj) => {
+          if(season){
+            return obj.seasonid === season
+          }
+          return obj
+        })
         setMyProgress(dateArray.map((date) => {
           return {
             date: dayjs(date).format('DD MMM YYYY'),
@@ -130,7 +156,7 @@ export default function Home() {
       }
       setLoading(false)
       return response
-  }, [router, teams, user, chart])
+  }, [router, teams, user, chart, season])
 
   useEffect(() => {
     if (user) {
@@ -171,7 +197,10 @@ export default function Home() {
               ft{' '}<code className="text-sm md:text-2xl italic font-mono font-bold">Mengembara ke Surga</code> 
             </div>
           </Link>
-          <UserNav user={user}/>
+          <div className="flex gap-4">
+            <SeasonSwitcher selectedSeason={selectedSeason} />
+            <UserNav user={user}/>
+          </div>
         </div>
       </div>
       
@@ -247,7 +276,17 @@ export default function Home() {
                             <AvatarFallback>{getInitials(player?.displayName)}</AvatarFallback>
                           </Avatar>
                         </TableCell>
-                        <TableCell>{player?.displayName}</TableCell>
+                        <TableCell>
+                          <div className="flex gap-3">
+                            {player?.displayName}
+                            {
+                              player?.target && 
+                              <CheckIcon
+                                className="rounded-full p-1 bg-blue-400 text-white h-4 w-4"
+                              />
+                            }
+                          </div>
+                        </TableCell>
                         <TableCell>{level(player.exp)}</TableCell>
                         <TableCell className="relative">
                             <RankIcon rank={rank(level(player.exp))} />
