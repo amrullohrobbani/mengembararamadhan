@@ -307,7 +307,7 @@ export default function Home() {
               </div>
             </div>
             <div className="h-full overflow-auto rounded-md bg-white m-5 no-scrollbar">
-              <div className="h-full">
+              <div className="h-[50vh] md:h-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     width={500}
