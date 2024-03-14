@@ -232,7 +232,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col justify-end">
                   <div className="flex justify-center">
-                    <Avatar className="h-8 w-8 mb-1">
+                    <Avatar className="h-10 w-10 mb-1">
                       <AvatarImage src={players?.[0]?.photoURL} alt="PP" />
                       <AvatarFallback>{getInitials(players?.[0]?.displayName)}</AvatarFallback>
                     </Avatar>
@@ -247,7 +247,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col justify-end">
                   <div className="flex justify-center">
-                    <Avatar className="h-8 w-8 mb-1">
+                    <Avatar className="h-9 w-9 mb-1">
                       <AvatarImage src={players?.[1]?.photoURL} alt="PP" />
                       <AvatarFallback>{getInitials(players?.[1]?.displayName)}</AvatarFallback>
                     </Avatar>
