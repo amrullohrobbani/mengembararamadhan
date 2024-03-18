@@ -135,19 +135,19 @@ export const level = (exp) => {
 
 export const rank = (level) => {
   switch (true) {
-    case inRange(level, 1, 5):
+    case inRange(level, 1, 6):
       return 'Herald'
-    case inRange(level, 6, 10):
+    case inRange(level, 6, 11):
       return 'Guardian'
-    case inRange(level, 11, 15):
+    case inRange(level, 11, 16):
       return 'Crusader'
-    case inRange(level, 16, 20):
+    case inRange(level, 16, 21):
       return 'Archon'
-    case inRange(level, 21, 25):
+    case inRange(level, 21, 26):
       return 'Legend'
-    case inRange(level, 26, 30):
+    case inRange(level, 26, 31):
       return 'Ancient'
-    case inRange(level, 31, 35):
+    case inRange(level, 31, 36):
       return 'Divine'
     default:
       return 'Immortal'

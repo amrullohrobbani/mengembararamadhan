@@ -107,14 +107,17 @@ export default function AboutDevPage() {
                             </CardContent>
                         </CardTemplate>
                     </div>
-                    <div className="flex items-center justify-center w-full h-full relative">
+                    <div className="flex items-center justify-center w-full h-full relative pr-24">
                         <div className="relative w-full text-center">
-                            <h1 className="font-bold text-5xl whitespace-nowrap text-black/30">
+                            <h1 className="font-bold text-5xl whitespace-nowrap text-black/20">
                                 Muhammad Amrulloh Robbani
                             </h1>
                             <h3 className="text-lg font-bold whitespace-nowrap -mt-8 text-[#34d399]">
                                 Muhammad Amrulloh Robbani
                             </h3>
+                            <div className="text-justify px-12 text-white py-12">
+                                Voracious full-stack web developer who specializes in front-end aspects for 4 years and enthusiastic biomedical engineer with proven skills in ideation, creation, and leadership in 1 internship and several biomedical engineering projects. Interested in biomedical data integration and optimization in sports or eSports to enhance player performance and coaches' knowledge. Led front-end team to refactor company CSR website to increase customer engagement up to 800 users and completed 4 biomedical engineering projects: non-invasive glaucoma detection, wearable ECG, teenager fitness data acquisition, and non-invasive fetal electrocardiogram.
+                            </div>
                         </div>
                     </div>
                 </div>
