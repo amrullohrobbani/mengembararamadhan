@@ -33,7 +33,7 @@
   
   /* Style the front side (fallback if image is missing) */
   .flip-card-front {
-    @apply rounded-md bg-cover border-8 border-[#670100] bg-center bg-[url(../../assets/image/unnamed.png)];
+    @apply bg-white rounded-md bg-cover border-8 border-[#670100] bg-center bg-[url(../../assets/image/unnamed.png)];
   }
   
   /* Style the back side */
