@@ -1,15 +1,29 @@
+'use client'
 import Image from "next/image"
 import imagePlaceholder from '@/assets/image/imagePlaceholder.jpg'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Icons } from "@/components/icons"
 import Link from "next/link"
+import { useRef } from "react"
 
 import CardTemplate from "@/components/card/card-template"
 import {
   CardContent,
 } from "@/components/ui/card"
+import { useInView } from 'react-intersection-observer'
 
 export default function AboutDevPage() {
+    const cardRef = useRef(null)
+
+    const { ref } = useInView({
+        threshold: 0,
+        onChange(inView) {
+            console.log(inView)
+            if(inView){
+                cardRef.current?.focus()
+            }
+        }
+    })
     return (
         <>
             <div className="bg-[url('~/src/assets/image/imageBackgroundHeader.jpg')] h-screen w-screen">
@@ -90,13 +104,13 @@ export default function AboutDevPage() {
             <div className="w-screen bg-[#222222]">
                 <div className="absolute w-full h-full bg-gradient-to-b from-black to-40%" />
                 <div className="grid grid-cols-2 py-56">
-                    <div className="flex items-center justify-center relative">
+                    <div className="flex items-center justify-center relative" ref={ref}>
                         <div className="absolute top-5 right-48">
                             <svg height="33.25rem" width="23.75rem" viewBox="0 0 100 100" preserveAspectRatio="none">
                                 <path d="M0 0 L100 0 L100 100 L0 100 Z" strokeWidth="5" stroke="#34d399" fill="none"/>
                             </svg>
                         </div>
-                        <CardTemplate>
+                        <CardTemplate ref={cardRef}>
                             <CardContent className="grid gap-4 h-full text-center">
                                 <Image src={imagePlaceholder} fill alt="PP"/>
                                 <div className="absolute h-full w-full top-0 left-0">
@@ -112,7 +126,7 @@ export default function AboutDevPage() {
                             <h1 className="font-bold text-5xl whitespace-nowrap text-black/20">
                                 Muhammad Amrulloh Robbani
                             </h1>
-                            <h3 className="text-lg font-bold whitespace-nowrap -mt-8 text-[#34d399]">
+                            <h3 className="text-lg font-bold whitespace-nowrap -mt-8 text-[#34d399]" onClick={cardRef.current?.focus()}>
                                 Muhammad Amrulloh Robbani
                             </h3>
                             <div className="text-justify px-12 text-white py-12">
