@@ -130,7 +130,7 @@ export default function AboutDevPage() {
                                 Muhammad Amrulloh Robbani
                             </h3>
                             <div className="text-justify px-12 text-white py-12">
-                                Voracious full-stack web developer who specializes in front-end aspects for 4 years and enthusiastic biomedical engineer with proven skills in ideation, creation, and leadership in 1 internship and several biomedical engineering projects. Interested in biomedical data integration and optimization in sports or eSports to enhance player performance and coaches' knowledge. Led front-end team to refactor company CSR website to increase customer engagement up to 800 users and completed 4 biomedical engineering projects: non-invasive glaucoma detection, wearable ECG, teenager fitness data acquisition, and non-invasive fetal electrocardiogram.
+                                Voracious full-stack web developer who specializes in front-end aspects for 4 years and enthusiastic biomedical engineer with proven skills in ideation, creation, and leadership in 1 internship and several biomedical engineering projects. Interested in biomedical data integration and optimization in sports or eSports to enhance player performance and coaches knowledge. Led front-end team to refactor company CSR website to increase customer engagement up to 800 users and completed 4 biomedical engineering projects: non-invasive glaucoma detection, wearable ECG, teenager fitness data acquisition, and non-invasive fetal electrocardiogram.
                             </div>
                         </div>
                     </div>
