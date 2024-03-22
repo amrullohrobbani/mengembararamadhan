@@ -14,22 +14,23 @@ import { useInView } from 'react-intersection-observer'
 
 export default function AboutDevPage() {
     const cardRef = useRef(null)
-
+    
     const { ref } = useInView({
         threshold: 0,
         onChange(inView) {
-            console.log(inView)
             if(inView){
-                cardRef.current?.focus()
+                cardRef.current.children[0].classList.add('rotateY180')
+                cardRef.current.children[0].classList.remove('-rotateY180')
             }
         }
     })
     return (
         <>
-            <div className="bg-[url('~/src/assets/image/imageBackgroundHeader.jpg')] h-screen w-screen">
-                <div className="absolute h-screen w-screen bg-gradient-to-t from-black/70 from-10%" />
-                <div className="absolute h-screen w-screen bg-black/90" />
-                <div className="relative px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2">
+            <div className="h-screen w-screen perspective-1">
+                <div className="absolute bg-[url('~/src/assets/image/imageBackgroundHeader.jpg')] h-screen w-screen parallax__layer__0" />
+                <div className="absolute h-screen w-screen bg-gradient-to-t from-black/70 from-10% parallax__layer__3" />
+                <div className="absolute h-screen w-screen bg-black/90 parallax__layer__5" />
+                <div className="relative px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 parallax__layer__1">
                     <div className="w-full px-36 relative">
                         <AspectRatio ratio={3/5} className="relative h-screen">
                             <svg height="100" width="100" xmlns="http://www.w3.org/2000/svg" className="top-[16%] left-[33%] -translate-x-[50%] -translate-y-[50%] absolute" >
@@ -59,7 +60,7 @@ export default function AboutDevPage() {
                             <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(23% 21% 22% 78%)"}} className="absolute object-contain top-0" fill /> */}
                         </AspectRatio>
                     </div>
-                    <div className="mx-auto max-w-4xl py-32 sm:py-48 lg:py-56">
+                    <div className="mx-auto max-w-4xl h-screen flex items-center">
                         <div className="text-center">
                             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">Muhammad Amrulloh Robbani</h1>
                             <div className="mt-6 text-lg leading-8 text-gray-200 grid grid-cols-3 gap-3">
@@ -95,9 +96,6 @@ export default function AboutDevPage() {
                                 {/* <a href="#" className="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">→</span></a> */}
                             </div>
                         </div>
-                    </div>
-                    <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
-                        <div className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style={{clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"}}></div>
                     </div>
                 </div>
             </div>
