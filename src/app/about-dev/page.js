@@ -472,10 +472,10 @@ export default function AboutDevPage() {
                 </div>
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
-                <div className="w-full text-center text-white text-3xl pt-12 pb-6">
+                <div className="w-full text-center text-white text-3xl pt-12 pb-6 absolute">
                     ARTWORKS
                 </div>
-                <div className="w-full h-full flex justify-center relative pt-16" ref={ref}>
+                <div className="w-full h-full flex justify-center relative items-center" ref={ref}>
                     <Carousel
                         opts={{
                             align: "start",
@@ -503,10 +503,10 @@ export default function AboutDevPage() {
                 </div>    
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
-                <div className="w-full text-center text-white text-3xl pt-12 pb-6">
+                <div className="w-full text-center text-white text-3xl pt-12 pb-6 absolute">
                     YONKOMA
                 </div>
-                <div className="w-full h-full flex justify-center relative pt-16" ref={refYonkoma}>
+                <div className="w-full h-full flex justify-center relative items-center" ref={refYonkoma}>
                     <Carousel
                         opts={{
                             align: "start",
