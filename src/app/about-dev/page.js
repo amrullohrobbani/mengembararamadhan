@@ -116,8 +116,11 @@ export default function AboutDevPage() {
                 for (let index = 0; index < cardsRef.current.length; index++) {
                     if(api.slidesInView().includes(index)){
                         cardsRef.current[index].children[0].classList.add('rotateY180')
-                        cardsRef.current[index].children[0].classList.remove('-rotateY180')
                     }
+                }
+            } else {
+                for (let index = 0; index < cardsRef.current.length; index++) {
+                    cardsRef.current[index].children[0].classList.remove('rotateY180')
                 }
             }
         }
@@ -128,12 +131,28 @@ export default function AboutDevPage() {
           return
         }
         api.on("select", () => {
-            // api.slidesInView().map((item) => {
-            //     const constant = item === 0? cardsRef.current.length -1   : item - 1
-            //     cardsRef.current[constant].children[0].classList.add('rotateY180')
-            //     cardsRef.current[constant].children[0].classList.remove('-rotateY180')
-            // })
-            cardsRef.current[api.selectedScrollSnap()].children[0].classList.add('rotateY180')
+            for (let index = 0; index < cardsRef.current.length; index++) {
+                if(api.slidesNotInView().includes(index)){
+                    cardsRef.current[index].children[0].classList.remove('rotateY180')
+                }
+            }
+            const imageIdx = [api.selectedScrollSnap(), api.selectedScrollSnap() + 2].map((id) => {
+                    if(id === cardsRef.current.length + 2) {
+                        return 1
+                    }
+                    if(id > cardsRef.current.length - 1) {
+                        return 0
+                    }
+                    if(id < 0) {
+                        return cardsRef.current.length - 1
+                    }
+                    return id
+                }
+            )
+            imageIdx.map((id) => {
+                console.log(id)
+                cardsRef.current[id].children[0].classList.add('rotateY180')
+            })
         })
       }, [api])
 
@@ -418,7 +437,7 @@ export default function AboutDevPage() {
                             {imageList.map((_, index) => (
                             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                                 <div className="p-1">
-                                <CardTemplate ref={el => cardsRef.current[index] = el} >
+                                <CardTemplate ref={el => cardsRef.current[index] = el} className={[index, _.default.src]}>
                                     <CardContent className="grid gap-4 h-full text-center">
                                         <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP"/>
                                     </CardContent>
