@@ -475,7 +475,7 @@ export default function AboutDevPage() {
                 <div className="w-full text-center text-white text-3xl pt-12 pb-6">
                     ARTWORKS
                 </div>
-                <div className="w-full h-full flex justify-center relative" ref={ref}>
+                <div className="w-full h-full flex justify-center relative pt-16" ref={ref}>
                     <Carousel
                         opts={{
                             align: "start",
@@ -506,7 +506,7 @@ export default function AboutDevPage() {
                 <div className="w-full text-center text-white text-3xl pt-12 pb-6">
                     YONKOMA
                 </div>
-                <div className="w-full h-full flex justify-center relative" ref={refYonkoma}>
+                <div className="w-full h-full flex justify-center relative pt-16" ref={refYonkoma}>
                     <Carousel
                         opts={{
                             align: "start",
