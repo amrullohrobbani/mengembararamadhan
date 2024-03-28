@@ -31,6 +31,10 @@ import {
 const images = require.context('@/assets/image/artwork', true);
 const imageList = images.keys().map(image => images(image));
 
+
+const imagesYonkoma = require.context('@/assets/image/yonkoma', true);
+const imageYonkomaList = imagesYonkoma.keys().map(image => imagesYonkoma(image));
+
 export default function AboutDevPage() {
     const experienceList = [
         {
@@ -107,7 +111,9 @@ export default function AboutDevPage() {
 
     const [state, setState] = useState(experienceList[0])
     const [api, setApi] = useState(null)
+    const [apiYonkoma , setApiYonkoma] = useState(null)
     const cardsRef = useRef([])
+    const cardsRefYonkoma = useRef([])
     
     const { ref } = useInView({
         threshold: 0,
@@ -125,6 +131,23 @@ export default function AboutDevPage() {
             }
         }
     })
+    
+    const { ref : refYonkoma } = useInView({
+        threshold: 0,
+        onChange(inView) {
+            if(inView){
+                for (let index = 0; index < cardsRefYonkoma.current.length; index++) {
+                    if(apiYonkoma.slidesInView().includes(index)){
+                        cardsRefYonkoma.current[index].children[0].classList.add('rotateY180')
+                    }
+                }
+            } else {
+                for (let index = 0; index < cardsRefYonkoma.current.length; index++) {
+                    cardsRefYonkoma.current[index].children[0].classList.remove('rotateY180')
+                }
+            }
+        }
+    })
 
     useEffect(() => {
         if (!api) {
@@ -137,7 +160,7 @@ export default function AboutDevPage() {
                 }
             }
             const imageIdx = [api.selectedScrollSnap(), api.selectedScrollSnap() + 2].map((id) => {
-                    if(id === cardsRef.current.length + 2) {
+                    if(id === cardsRef.current.length + 1) {
                         return 1
                     }
                     if(id > cardsRef.current.length - 1) {
@@ -150,11 +173,39 @@ export default function AboutDevPage() {
                 }
             )
             imageIdx.map((id) => {
-                console.log(id)
                 cardsRef.current[id].children[0].classList.add('rotateY180')
             })
         })
       }, [api])
+
+      useEffect(() => {
+        if (!apiYonkoma) {
+          return
+        }
+        apiYonkoma.on("select", () => {
+            for (let index = 0; index < cardsRefYonkoma.current.length; index++) {
+                if(apiYonkoma.slidesNotInView().includes(index)){
+                    cardsRefYonkoma.current[index].children[0].classList.remove('rotateY180')
+                }
+            }
+            const imageIdx = [apiYonkoma.selectedScrollSnap(), apiYonkoma.selectedScrollSnap() + 2].map((id) => {
+                    if(id === cardsRefYonkoma.current.length + 1) {
+                        return 1
+                    }
+                    if(id > cardsRefYonkoma.current.length - 1) {
+                        return 0
+                    }
+                    if(id < 0) {
+                        return cardsRefYonkoma.current.length - 1
+                    }
+                    return id
+                }
+            )
+            imageIdx.map((id) => {
+                cardsRefYonkoma.current[id].children[0].classList.add('rotateY180')
+            })
+        })
+      }, [apiYonkoma])
 
     return (
         <>
@@ -422,7 +473,7 @@ export default function AboutDevPage() {
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
                 <div className="w-full text-center text-white text-3xl pt-12 pb-6">
-                    ARTWORK
+                    ARTWORKS
                 </div>
                 <div className="w-full h-full flex justify-center relative" ref={ref}>
                     <Carousel
@@ -437,7 +488,38 @@ export default function AboutDevPage() {
                             {imageList.map((_, index) => (
                             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                                 <div className="p-1">
-                                <CardTemplate ref={el => cardsRef.current[index] = el} className={[index, _.default.src]}>
+                                <CardTemplate ref={el => cardsRef.current[index] = el}>
+                                    <CardContent className="grid gap-4 h-full text-center">
+                                        <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP"/>
+                                    </CardContent>
+                                </CardTemplate>
+                                </div>
+                            </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                </div>    
+            </div>
+            <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
+                <div className="w-full text-center text-white text-3xl pt-12 pb-6">
+                    YONKOMA
+                </div>
+                <div className="w-full h-full flex justify-center relative" ref={refYonkoma}>
+                    <Carousel
+                        opts={{
+                            align: "start",
+                            loop: true
+                        }}
+                        className="w-full max-w-6xl"
+                        setApi={setApiYonkoma}
+                        >
+                        <CarouselContent>
+                            {imageYonkomaList.map((_, index) => (
+                            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                                <div className="p-1">
+                                <CardTemplate ref={el => cardsRefYonkoma.current[index] = el}>
                                     <CardContent className="grid gap-4 h-full text-center">
                                         <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP"/>
                                     </CardContent>
