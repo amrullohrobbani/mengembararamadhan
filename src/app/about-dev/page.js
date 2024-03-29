@@ -490,7 +490,7 @@ export default function AboutDevPage() {
                                 <div className="p-1">
                                 <CardTemplate ref={el => cardsRef.current[index] = el}>
                                     <CardContent className="grid gap-4 h-full text-center">
-                                        <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP"/>
+                                        <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP" quality={50}/>
                                     </CardContent>
                                 </CardTemplate>
                                 </div>
@@ -521,7 +521,7 @@ export default function AboutDevPage() {
                                 <div className="p-1">
                                 <CardTemplate ref={el => cardsRefYonkoma.current[index] = el}>
                                     <CardContent className="grid gap-4 h-full text-center">
-                                        <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP"/>
+                                        <Image src={_.default} fill className={_.default.height > _.default.width?'object-cover':'object-contain'} alt="PP" quality={50}/>
                                     </CardContent>
                                 </CardTemplate>
                                 </div>
