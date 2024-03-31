@@ -3,6 +3,7 @@ import Image from "next/image"
 import imagePlaceholder from '@/assets/image/imagePlaceholder.jpg'
 import imageMine from '@/assets/image/mine 2.png'
 import me from '@/assets/image/S10122I-009340.A_IMG_0020 asf.jpg'
+import Regista from '@/assets/image/Regista.png'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Icons } from "@/components/icons"
 import Link from "next/link"
@@ -13,6 +14,7 @@ import {
     CardContent,
 } from "@/components/ui/card"
 import { useInView } from 'react-intersection-observer'
+import { InstagramLogoIcon, DiscordLogoIcon } from '@radix-ui/react-icons'
 
 import suteki from '@/assets/image/experience/suteki.jpeg'
 import elife from '@/assets/image/experience/elife.jpeg'
@@ -105,7 +107,7 @@ export default function AboutDevPage() {
             place: 'Bandung, Indonesia',
             time: 'Feb 2019 – Present',
             logo: regista,
-            image: imageMine
+            image: Regista
         },
     ]
 
@@ -532,6 +534,60 @@ export default function AboutDevPage() {
                         <CarouselNext />
                     </Carousel>
                 </div>    
+            </div>
+            <div className="w-full h-[fit-content] min-h-[221px] bg-[linear-gradient(80deg,_#252728_0%,_#101415_100%)] border-t-[2px_solid_#282828] border-b-[2px_solid_#2c2e2e] [box-shadow:0px_0px_8px_#000] flex flex-wrap justify-center">
+                <div className="w-full text-center text-white text-3xl py-6">
+                    Feel free to contact me
+                </div>
+                <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-row items-center justify-evenly text-white">
+                    <div className="min-w-[300px] w-[30%] h-[fit-content] flex flex-col justify-center items-center">
+                        <div className="w-full h-full flex items-center justify-center" >
+                            <div className="flex gap-3 items-center">
+                                <div>
+                                    <Icons.gmail/>
+                                </div>
+                                <div className="text-base">
+                                    amrullohrobbani@gmail.com
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                            Email
+                        </div>
+                    </div>
+                    <div className="w-px h-full flex flex-row items-center after:content-[''] after:w-full after:h-4/5 after:bg-[#4f4f4f]" />
+                    <div className="min-w-[300px] w-[30%] h-full flex flex-col justify-center items-center">
+                        <div className="w-full h-full flex items-center" >
+                            <div className="flex gap-3 items-center">
+                                <div>
+                                    <DiscordLogoIcon/>
+                                </div>
+                                <div className="text-base">
+                                    amrullohrobbani
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                            DISCORD
+                        </div>
+                    </div>
+                    <div className="w-px h-full flex flex-row items-center after:content-[''] after:w-full after:h-4/5 after:bg-[#4f4f4f]" />
+                    <div className="min-w-[300px] w-[30%] h-full flex flex-col justify-center items-center">
+                        <div className="w-full h-full flex items-center" >
+                            <div className="flex gap-3 items-center">
+                                <div>
+                                    <InstagramLogoIcon/>
+                                </div>
+                                <div className="text-base">
+                                    amrullohrobbani
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                            INSTAGRAM
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )
