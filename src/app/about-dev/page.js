@@ -557,7 +557,7 @@ export default function AboutDevPage() {
                     </div>
                     <div className="w-px h-full flex flex-row items-center after:content-[''] after:w-full after:h-4/5 after:bg-[#4f4f4f]" />
                     <div className="min-w-[300px] w-[30%] h-full flex flex-col justify-center items-center">
-                        <div className="w-full h-full flex items-center" >
+                        <div className="w-full h-full flex items-center justify-center" >
                             <div className="flex gap-3 items-center">
                                 <div>
                                     <DiscordLogoIcon/>
@@ -573,7 +573,7 @@ export default function AboutDevPage() {
                     </div>
                     <div className="w-px h-full flex flex-row items-center after:content-[''] after:w-full after:h-4/5 after:bg-[#4f4f4f]" />
                     <div className="min-w-[300px] w-[30%] h-full flex flex-col justify-center items-center">
-                        <div className="w-full h-full flex items-center" >
+                        <div className="w-full h-full flex items-center justify-center" >
                             <div className="flex gap-3 items-center">
                                 <div>
                                     <InstagramLogoIcon/>
