@@ -35,6 +35,8 @@ import {
     CarouselPrevious,
   } from "@/components/ui/carousel"
 
+import Autoplay from "embla-carousel-autoplay"
+
 const images = require.context('@/assets/image/artwork', true);
 const imageList = images.keys().map(image => images(image));
 
@@ -221,8 +223,8 @@ export default function AboutDevPage() {
                 <div className="absolute h-screen w-screen bg-gradient-to-t from-black/70 from-10% parallax__layer__3" />
                 <div className="absolute h-screen w-screen bg-black/80 parallax__layer__5" />
                 <div className="relative px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 parallax__layer__1">
-                    <div className="w-full px-36 relative">
-                        <AspectRatio ratio={3/5} className="relative h-screen">
+                    <div className="w-full px-0 md:px-36 relative">
+                        <div className="relative h-screen">
                             <svg height="100" width="100" xmlns="http://www.w3.org/2000/svg" className="top-[16%] left-[33%] -translate-x-[50%] -translate-y-[50%] absolute" >
                                 <circle r="45" cx="50" cy="50" fill="none" stroke="white" strokeWidth="3" opacity="1"/>
                             </svg>
@@ -234,7 +236,7 @@ export default function AboutDevPage() {
                             </svg>
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(19% 65% 32% 23%)"}} />
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(52% 31% 6% 53%)"}} />
-                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(53% 32% 7% 54%)"}} className="absolute object-contain top-0" fill quality={10} />
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(53% 32% 7% 54%)"}} className="absolute object-cover top-0" fill quality={10} />
                             <svg height="100%" width="100%" viewBox="0 0 100 100"  preserveAspectRatio="none" className="drop-shadow-[0_13px_13px_rgba(0,0,0,0.25)]" >
                                 <path d="M37 6 L63 6 L63 86 L37 86 Z" stroke="white" strokeWidth="1" />
                                 <line x1={43} x2={43} y1={2} y2={50} stroke="white" strokeWidth="0.25" />
@@ -244,11 +246,11 @@ export default function AboutDevPage() {
                                 <line x1={30} x2={30} y1={50} y2={78} stroke="white" strokeWidth="0.25" />
                                 <line x1={31} x2={31} y1={50} y2={79} stroke="white" strokeWidth="0.5" /> 
                             </svg>
-                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(20% 66% 33% 24%)"}} className="absolute object-contain top-0" fill quality={10} />
-                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(6% 37% 14% 37%)"}} className="absolute object-contain top-0" fill quality={10} />
-                        </AspectRatio>
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(20% 66% 33% 24%)"}} className="absolute object-cover top-0" fill quality={10} />
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(6% 37% 14% 37%)"}} className="absolute object-cover top-0" fill quality={10} />
+                        </div>
                     </div>
-                    <div className="mx-auto max-w-4xl h-screen flex items-center">
+                    <div className="mx-auto max-w-4xl h-screen hidden md:flex items-center">
                         <div className="text-center">
                             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">Muhammad Amrulloh Robbani</h1>
                             <div className="mt-6 text-lg leading-8 text-gray-200 grid grid-cols-3 gap-3">
@@ -280,7 +282,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
-                                <a href="#" className="rounded-md bg-emerald-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Download CV</a>
+                                <Link href="~/src/assets/CV Muhammad Amrulloh Robbani.pdf" locale={false} className="rounded-md bg-emerald-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Download CV</Link>
                                 {/* <a href="#" className="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">→</span></a> */}
                             </div>
                         </div>
@@ -289,21 +291,21 @@ export default function AboutDevPage() {
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative">
                 <div className="absolute w-full h-[40vh] bg-gradient-to-b from-black to-40%" />
-                <div className="absolute bottom-0 left-0 text-white font-semibold -rotate-90 origin-top-left translate-y-12 py-12 w-full flex gap-3 items-center whitespace-nowrap">ENGINEER AND DESIGNER <hr className="w-full border-slate-700"/></div>
+                <div className="absolute bottom-0 left-0 text-white font-semibold -rotate-90 origin-top-left translate-y-12 py-12 w-full hidden md:flex gap-3 items-center whitespace-nowrap">ENGINEER AND DESIGNER <hr className="w-full border-slate-700"/></div>
                 <div className="flex w-full h-full relative">
-                    <div className="grid grid-cols-2 px-24">
-                        <div className="flex items-center justify-center w-full h-full relative pr-24">
-                            <div className="relative w-full px-12">
-                                <h1 className="font-bold text-5xl whitespace-nowrap text-black/20">
+                    <div className="grid grid-cols-1 md:grid-cols-2 px-5 md:px-24">
+                        <div className="flex items-center justify-center w-full h-full relative pr-0 xl:pr-24">
+                            <div className="relative w-full xl:px-12">
+                                <h1 className="font-bold text-lg md:text-5xl whitespace-nowrap text-black/20">
                                     Muhammad Amrulloh Robbani
                                 </h1>
-                                <h2 className="text-2xl font-bold whitespace-nowrap -mt-7 text-white">
+                                <h2 className="text-sm md:text-2xl font-bold whitespace-nowrap -mt-7 text-white">
                                     Muhammad Amrulloh Robbani
                                 </h2>
-                                <h4 className="text-xl font-semibold whitespace-nowrap text-[#34d399]">
+                                <h4 className="text-xs md:text-xl font-semibold whitespace-nowrap text-[#34d399]">
                                     Biomedical Engineering and Full Stack Developer
                                 </h4>
-                                <div className="text-justify text-white text-xl py-12">
+                                <div className="text-justify text-white text-xs md:text-lg xl:text-xl py-12">
                                     Voracious full-stack web developer who specializes in front-end aspects for 4 years and enthusiastic biomedical engineer with proven skills in ideation, creation, and leadership in 1 internship and several biomedical engineering projects. Interested in biomedical data integration and optimization in sports or eSports to enhance player performance and coaches knowledge. Led front-end team to refactor company CSR website to increase customer engagement up to 800 users and completed 4 biomedical engineering projects: non-invasive glaucoma detection, wearable ECG, teenager fitness data acquisition, and non-invasive fetal electrocardiogram.
                                 </div>
                             </div>
@@ -315,10 +317,10 @@ export default function AboutDevPage() {
                 </div>
             </div>
             <div className="w-full h-[fit-content] min-h-[221px] bg-[linear-gradient(80deg,_#252728_0%,_#101415_100%)] border-t-[2px_solid_#282828] border-b-[2px_solid_#2c2e2e] [box-shadow:0px_0px_8px_#000] flex justify-center">
-                <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-row items-center justify-evenly text-white">
+                <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-col md:flex-row items-center justify-evenly text-white text-xs md:text-base">
                     <div className="min-w-[300px] w-[30%] h-[fit-content] flex flex-col justify-center items-center">
                         <div className="grid grid-cols-2 w-full" >
-                            <div className="px-8 py-5">
+                            <div className="flex items-center px-8 py-5">
                                 <AspectRatio ratio={4/3} className="w-full h-full">
                                     <Image src={me} alt="PP" className="object-cover" fill />
                                 </AspectRatio>
@@ -328,7 +330,7 @@ export default function AboutDevPage() {
                                 <div>Bachelor of Engineering, majoring in Biomedical Engineering	(GPA: 3.14)</div>
                             </div>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             PAST EDUCATION
                         </div>
                     </div>
@@ -340,7 +342,7 @@ export default function AboutDevPage() {
                                 <li className="ml-10">Developed an electrode for wearable electrocardiogram vest and full - stack website and cloud to manage, analyze and display ECG data</li>
                             </ul>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             PAST EDUCATION PROJECT
                         </div>
                     </div>
@@ -352,18 +354,18 @@ export default function AboutDevPage() {
                                 <li className="ml-10">Received YBP PLN Scholarship</li>
                             </ul>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             PAST SCHOLARSHIP
                         </div>
                     </div>
                 </div>
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
-                <div className="absolute bottom-0 left-0 text-white font-semibold -rotate-90 origin-top-left translate-y-12 py-12 w-full flex gap-3 items-center whitespace-nowrap">Muhammad Amrulloh Robbani <hr className="w-full border-slate-700"/></div>
+                <div className="absolute bottom-0 left-0 text-white font-semibold -rotate-90 origin-top-left translate-y-12 py-12 w-full hidden md:flex gap-3 items-center whitespace-nowrap">Muhammad Amrulloh Robbani <hr className="w-full border-slate-700"/></div>
                 <div className="w-full text-center text-white text-3xl pt-12 pb-6">
                     EXPERIENCE DETAIL
                 </div>
-                <div className="w-full h-full grid grid-cols-2 ml-24">
+                <div className="w-full h-full grid grid-cols-2 ml-0 md:ml-24">
                     <div className="w-full h-[65vh] p-1">
                         <Card className="w-full h-full rounded-sm shadow-2xl border-none">
                             <CardContent className="w-full h-full relative">
@@ -374,19 +376,19 @@ export default function AboutDevPage() {
                     <div className="w-full h-[65vh] p-1">
                         <div className="h-[fit-content] w-full ">
                             <Card className="w-full h-full rounded-sm shadow-2xl bg-gradient-to-br from-[#121212] to-neutral-700 border-none text-white">
-                                <CardContent className="w-full h-full relative p-5">
+                                <CardContent className="w-full h-full relative p-1 md:p-5">
                                 <div className="flex gap-5 w-full" >
-                                    <div className="w-24">
+                                    <div className="w-24 hidden md:flex">
                                         <AspectRatio ratio={1/1} className="w-24 h-24">
                                             <Image src={state.logo} alt="PP" className="object-cover" fill />
                                         </AspectRatio>
                                     </div>
-                                    <div className="ml-8 pr-24 w-full">
-                                        <div className="font-semibold text-xl">{state.name}</div>
-                                        <div className="text-lg">{state.description}</div>
-                                        <div className="font-semibold">{state.position}</div>
+                                    <div className="ml-1 md:ml-8 pr-0md:pr-24 w-full">
+                                        <div className="font-semibold text-sm md:text-xl">{state.name}</div>
+                                        <div className="text-xs md:text-lg">{state.description}</div>
+                                        <div className="font-semibold text-xs md:text-base">{state.position}</div>
                                         <div className="mt-5">
-                                            <ul className="list-disc">
+                                            <ul className="list-disc text-xs md:text-base">
                                                 {
                                                     state?.job?.map((item, index) => {
                                                         return(
@@ -400,15 +402,15 @@ export default function AboutDevPage() {
                                 </div>
                                 </CardContent>
                                 <div className="w-full bg-black px-5 py-4">
-                                    <div className="text-lg text-[#737373] uppercase tracking-[1px] flex flex-row w-full mb-[4px]">
+                                    <div className="text-xs md:text-lg text-[#737373] uppercase tracking-[1px] flex flex-row w-full mb-[4px] whitespace-nowrap">
                                         Place :
-                                        <div className="ml-[4px] text-[#fff] font-semibold tracking-[0px] normal-case">
+                                        <div className="ml-[4px] text-[#fff] font-semibold tracking-[0px] normal-case whitespace-normal">
                                             {state.place}
                                         </div>
                                     </div>
-                                    <div className="text-lg text-[#737373] uppercase tracking-[1px] flex flex-row w-full mb-[4px]">
+                                    <div className="text-xs md:text-lg text-[#737373] uppercase tracking-[1px] flex flex-row w-full mb-[4px] whitespace-nowrap">
                                         Time :
-                                        <div className="ml-[4px] text-[#fff] font-semibold tracking-[0px] normal-case">
+                                        <div className="ml-[4px] text-[#fff] font-semibold tracking-[0px] normal-case whitespace-normal">
                                             {state.time}
                                         </div>
                                     </div>
@@ -416,11 +418,11 @@ export default function AboutDevPage() {
                             </Card>
                         </div>
                     </div>
-                    <div className="w-full h-full flex -mt-48">
+                    <div className="w-full h-full flex -mt-32 md:-mt-48">
                         {
                             experienceList.map((item) => {
                                 return (
-                                    <div className={`w-24 m-2 hover:scale-110 ${state.id === item.id?'':'grayscale'}`} onClick={() => setState(item)} key={item.id} >
+                                    <div className={`w-24 m-0.5 md:m-2 hover:scale-110 ${state.id === item.id?'':'grayscale'}`} onClick={() => setState(item)} key={item.id} >
                                         <AspectRatio ratio={1/1} className="w-full h-full bg-white">
                                             <Image src={item.logo} alt={item.id} className="object-cover" fill />
                                         </AspectRatio>
@@ -435,14 +437,14 @@ export default function AboutDevPage() {
                 <div className="w-full text-center text-white text-3xl py-6">
                     Additional Information
                 </div>
-                <div className="w-full px-12 py-[20px] relative flex flex-row items-center justify-evenly text-white">
+                <div className="w-full px-12 py-[20px] relative flex flex-col md:flex-row items-center justify-evenly text-white text-xs md:text-base">
                     <div className="min-w-[300px] w-[30%] h-full flex flex-col justify-center items-center">
                         <div className="w-full h-full flex items-center" >
                             <ul className="list-image-[url('~/src/assets/image/icon_magic_resist.png')]">
                                 <li className="ml-10">Passed level C1 of CEFR by getting 7.5 overall band score on IELTS </li>
                             </ul>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             Certification
                         </div>
                     </div>
@@ -456,7 +458,7 @@ export default function AboutDevPage() {
                                 <li className="ml-10">Language: English</li>
                             </ul>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             Skills
                         </div>
                     </div>
@@ -470,14 +472,14 @@ export default function AboutDevPage() {
                                 <li className="ml-10">Data Analysis in Sport and E-Sport</li>
                             </ul>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             Interest
                         </div>
                     </div>
                 </div>
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
-                <div className="w-full text-center text-white text-3xl pt-12 pb-6 absolute">
+                <div className="w-full text-center text-white text-3xl top-1 xl:top-12 absolute">
                     ARTWORKS
                 </div>
                 <div className="w-full h-full flex justify-center relative items-center" ref={ref}>
@@ -488,6 +490,11 @@ export default function AboutDevPage() {
                         }}
                         className="w-full max-w-6xl"
                         setApi={setApi}
+                        plugins={[
+                            Autoplay({
+                              delay: 2000,
+                            }),
+                          ]}
                         >
                         <CarouselContent>
                             {imageList.map((_, index) => (
@@ -508,7 +515,7 @@ export default function AboutDevPage() {
                 </div>    
             </div>
             <div className="w-screen h-screen bg-black bg-[url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota\_react//backgrounds/greyfade.jpg')] bg-[100%_auto] bg-[center_top] bg-no-repeat overflow-hidden relative shadow-[inset_0_35px_35px_-15px_rgba(0,0,0,0.5)]">
-                <div className="w-full text-center text-white text-3xl pt-12 pb-6 absolute">
+                <div className="w-full text-center text-white text-3xl top-1 xl:top-12 absolute">
                     YONKOMA
                 </div>
                 <div className="w-full h-full flex justify-center relative items-center" ref={refYonkoma}>
@@ -542,7 +549,7 @@ export default function AboutDevPage() {
                 <div className="w-full text-center text-white text-3xl py-6">
                     Feel Free to Contact Me
                 </div>
-                <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-row items-center justify-evenly text-white">
+                <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-col md:flex-row items-center justify-evenly text-white text-xs md:text-base">
                     <div className="min-w-[300px] w-[30%] h-[fit-content] flex flex-col justify-center items-center">
                         <div className="w-full h-full flex items-center justify-center" >
                             <div className="flex gap-3 items-center">
@@ -554,7 +561,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             Email
                         </div>
                     </div>
@@ -570,7 +577,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             DISCORD
                         </div>
                     </div>
@@ -586,7 +593,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="text-[#969696] text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
+                        <div className="text-[#969696] text-sm md:text-[18px] uppercase tracking-[2px] [text-shadow:1px_1px_2px_#000] mt-[12px]">
                             INSTAGRAM
                         </div>
                     </div>
