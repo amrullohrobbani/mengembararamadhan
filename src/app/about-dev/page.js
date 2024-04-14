@@ -1,9 +1,14 @@
 'use client'
 import Image from "next/image"
 import imagePlaceholder from '@/assets/image/imagePlaceholder.jpg'
+import imageMe from '@/assets/image/imageMe.png'
 import imageMine from '@/assets/image/mine 2.png'
 import me from '@/assets/image/S10122I-009340.A_IMG_0020 asf.jpg'
 import Regista from '@/assets/image/Regista.png'
+import Databugar from '@/assets/image/databugar.png'
+import Robovis from '@/assets/image/Robovis.png'
+import ELS from '@/assets/image/ELS.png'
+import Suteki from '@/assets/image/Suteki.png'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Icons } from "@/components/icons"
 import Link from "next/link"
@@ -51,7 +56,7 @@ export default function AboutDevPage() {
             place: 'Bandung, Indonesia',
             time: 'Mar 2022 – Present',
             logo: suteki,
-            image: imagePlaceholder
+            image: Suteki
         },
         {
             id: 'elife',
@@ -66,7 +71,7 @@ export default function AboutDevPage() {
             place: 'Johor, Malaysia',
             time: 'May 2018 – Jul 2018',
             logo: elife,
-            image: imageMine
+            image: ELS
         },
         {
             id: 'databugar',
@@ -79,7 +84,7 @@ export default function AboutDevPage() {
             place: 'Bandung, Indonesia',
             time: 'Feb 2019 – Feb 2022',
             logo: databugar,
-            image: imageMine
+            image: Databugar
         },
         {
             id: 'robovis',
@@ -94,7 +99,7 @@ export default function AboutDevPage() {
             place: 'Bandung, Indonesia',
             time: 'Jun 2018 – Jun 2021',
             logo: robovis,
-            image: imageMine
+            image: Robovis
         },
         {
             id: 'regista',
@@ -214,7 +219,7 @@ export default function AboutDevPage() {
             <div className="h-screen w-screen perspective-1">
                 <div className="absolute bg-[url('~/src/assets/image/imageBackgroundHeader.jpg')] h-screen w-screen parallax__layer__0" />
                 <div className="absolute h-screen w-screen bg-gradient-to-t from-black/70 from-10% parallax__layer__3" />
-                <div className="absolute h-screen w-screen bg-black/90 parallax__layer__5" />
+                <div className="absolute h-screen w-screen bg-black/80 parallax__layer__5" />
                 <div className="relative px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 parallax__layer__1">
                     <div className="w-full px-36 relative">
                         <AspectRatio ratio={3/5} className="relative h-screen">
@@ -229,7 +234,7 @@ export default function AboutDevPage() {
                             </svg>
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(19% 65% 32% 23%)"}} />
                             <div className="absolute w-full h-full bg-white" style={{clipPath: "inset(52% 31% 6% 53%)"}} />
-                            <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(53% 32% 7% 54%)"}} className="absolute object-contain top-0" fill />
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(53% 32% 7% 54%)"}} className="absolute object-contain top-0" fill quality={10} />
                             <svg height="100%" width="100%" viewBox="0 0 100 100"  preserveAspectRatio="none" className="drop-shadow-[0_13px_13px_rgba(0,0,0,0.25)]" >
                                 <path d="M37 6 L63 6 L63 86 L37 86 Z" stroke="white" strokeWidth="1" />
                                 <line x1={43} x2={43} y1={2} y2={50} stroke="white" strokeWidth="0.25" />
@@ -239,10 +244,8 @@ export default function AboutDevPage() {
                                 <line x1={30} x2={30} y1={50} y2={78} stroke="white" strokeWidth="0.25" />
                                 <line x1={31} x2={31} y1={50} y2={79} stroke="white" strokeWidth="0.5" /> 
                             </svg>
-                            <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(20% 66% 33% 24%)"}} className="absolute object-contain top-0" fill />
-                            <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(6% 37% 14% 37%)"}} className="absolute object-contain top-0" fill />
-                            {/* <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(16% 27% 14% 71%)"}} className="absolute object-contain top-0" fill />
-                            <Image src={imagePlaceholder} alt="PP" style={{clipPath: "inset(23% 21% 22% 78%)"}} className="absolute object-contain top-0" fill /> */}
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(20% 66% 33% 24%)"}} className="absolute object-contain top-0" fill quality={10} />
+                            <Image src={imageMe} alt="PP" style={{clipPath: "inset(6% 37% 14% 37%)"}} className="absolute object-contain top-0" fill quality={10} />
                         </AspectRatio>
                     </div>
                     <div className="mx-auto max-w-4xl h-screen flex items-center">
@@ -253,7 +256,7 @@ export default function AboutDevPage() {
                                     <div>
                                         <Icons.gmail/>
                                     </div>
-                                    <div className="text-base">
+                                    <div className="text-base truncate">
                                         amrullohrobbani@gmail.com
                                     </div>
                                 </div>
@@ -261,7 +264,7 @@ export default function AboutDevPage() {
                                     <div>
                                         <Icons.gitHub className="w-6"/>
                                     </div>
-                                    <div className="text-base">
+                                    <div className="text-base truncate">
                                         amrullohrobbani
                                     </div>
                                 </div>
@@ -269,7 +272,7 @@ export default function AboutDevPage() {
                                     <div>
                                         <Icons.linkedin className="w-6"/>
                                     </div>
-                                    <div className="text-base">
+                                    <div className="text-base truncate">
                                         <Link href="http://www.linkedin.com/in/muhammad-amrullah-robbani" passHref={true}>
                                             Muhammad Amrulloh Robbani
                                         </Link>
@@ -305,7 +308,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                         </div>
-                        <AspectRatio ratio={1/1} className="w-full h-full">
+                        <AspectRatio ratio={1/1} className="flex w-full h-full">
                             <Image src={imageMine} alt="PP" fill className="-mb-3" />
                         </AspectRatio>
                     </div>
@@ -537,7 +540,7 @@ export default function AboutDevPage() {
             </div>
             <div className="w-full h-[fit-content] min-h-[221px] bg-[linear-gradient(80deg,_#252728_0%,_#101415_100%)] border-t-[2px_solid_#282828] border-b-[2px_solid_#2c2e2e] [box-shadow:0px_0px_8px_#000] flex flex-wrap justify-center">
                 <div className="w-full text-center text-white text-3xl py-6">
-                    Feel free to contact me
+                    Feel Free to Contact Me
                 </div>
                 <div className="w-full max-w-[1600px] px-0 py-[20px] relative flex flex-row items-center justify-evenly text-white">
                     <div className="min-w-[300px] w-[30%] h-[fit-content] flex flex-col justify-center items-center">
