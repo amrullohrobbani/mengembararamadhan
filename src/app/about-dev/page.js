@@ -1,6 +1,5 @@
 'use client'
 import Image from "next/image"
-import imagePlaceholder from '@/assets/image/imagePlaceholder.jpg'
 import imageMe from '@/assets/image/imageMe.png'
 import imageMine from '@/assets/image/mine 2.png'
 import me from '@/assets/image/S10122I-009340.A_IMG_0020 asf.jpg'
@@ -39,7 +38,6 @@ import Autoplay from "embla-carousel-autoplay"
 
 const images = require.context('@/assets/image/artwork', true);
 const imageList = images.keys().map(image => images(image));
-
 
 const imagesYonkoma = require.context('@/assets/image/yonkoma', true);
 const imageYonkomaList = imagesYonkoma.keys().map(image => imagesYonkoma(image));
@@ -282,7 +280,7 @@ export default function AboutDevPage() {
                                 </div>
                             </div>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
-                                <Link href="~/src/assets/CV Muhammad Amrulloh Robbani.pdf" locale={false} className="rounded-md bg-emerald-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Download CV</Link>
+                                <a href="/CV Muhammad Amrulloh Robbani.pdf" download className="rounded-md bg-emerald-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Download CV</a>
                                 {/* <a href="#" className="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">→</span></a> */}
                             </div>
                         </div>
