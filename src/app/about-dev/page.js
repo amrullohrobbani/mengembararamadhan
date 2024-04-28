@@ -50,8 +50,13 @@ export default function AboutDevPage() {
             description: 'Education Technology Solutions Startup',
             position: 'Front End Engineer',
             job: [
-                'Led a front end team in Company CSR Project and developed a website to manage college students and synchronize data to The Ministry of Education, Culture, Research, and Technology Indonesia with up to 800 university users.',
-                'Designed and created company source control documentation to increase and optimize company main web product source control'
+                "Led front-end team for Company CSR Project, developing a website for college student management with data synchronization to The Ministry of Education, Culture, Research, and Technology Indonesia, serving 800+ university users.",
+                "Created company source control documentation, optimizing processes for the main web product.",
+                "Initiated migration from Vue 2 and Nuxt 2 to Vue 3 and Nuxt 3, enhancing performance and aligning with industry standards.",
+                "Initiated development of the company's private component library based on Vue 3 and Tailwind CSS.",
+                "Conducted code reviews to improve overall code quality.",
+                "Collaborated with backend, product owner, UI/UX, and quality assurance teams from grooming to UAT to ensure delivery of high-quality products.",
+                "Initiated the refactoring of one of the company's products, migrating from JavaScript to TypeScript for improved maintainability and scalability."
             ],
             place: 'Bandung, Indonesia',
             time: 'Mar 2022 – Present',
