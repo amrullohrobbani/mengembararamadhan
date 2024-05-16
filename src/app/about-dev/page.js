@@ -7,6 +7,7 @@ import Regista from '@/assets/image/Regista.png'
 import Databugar from '@/assets/image/databugar.png'
 import Robovis from '@/assets/image/Robovis.png'
 import ELS from '@/assets/image/ELS.png'
+import FMD from '@/assets/image/FMD.png'
 import Suteki from '@/assets/image/Suteki.png'
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Icons } from "@/components/icons"
@@ -25,6 +26,7 @@ import elife from '@/assets/image/experience/elife.jpeg'
 import databugar from '@/assets/image/experience/databugar.png'
 import robovis from '@/assets/image/experience/robovis.png'
 import regista from '@/assets/image/experience/regista.png'
+import dfm from '@/assets/image/experience/dfm.png'
 
 import {
     Carousel,
@@ -44,6 +46,21 @@ const imageYonkomaList = imagesYonkoma.keys().map(image => imagesYonkoma(image))
 
 export default function AboutDevPage() {
     const experienceList = [
+        {
+            id: 'dfm',
+            name: 'Biolectricity Based Fetal Movement Detector',
+            description: 'Freelance Project',
+            position: 'Research Engineer',
+            job: [
+                "Spearheaded the design and experimentation of biomedical instrumentation for bioelectricity-based fetal movement detectors, aiming for everyday use.",
+                "Collaborated closely with midwives to develop mobile, user-friendly, and precise instrumentation for fetal movement detection.",
+                "Utilized data analysis libraries such as SciPy and others, alongside Python and Google Colab, for comprehensive data analysis."
+            ],
+            place: 'Bandung, Indonesia',
+            time: 'July 2021 – Present',
+            logo: dfm,
+            image: FMD
+        },
         {
             id: 'suteki',
             name: 'Suteki Tech',
