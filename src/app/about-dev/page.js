@@ -130,6 +130,7 @@ export default function AboutDevPage() {
             position: 'Founder',
             job: [
                 'Designed and developed a sport GPS tracker for football players to track player vital and performance assessment tools.'
+                'For demo you can access the app at regista-app.vercel.app
             ],
             place: 'Bandung, Indonesia',
             time: 'Feb 2019 – Present',
@@ -303,7 +304,7 @@ export default function AboutDevPage() {
                             </div>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
                                 <a href="/CV Muhammad Amrulloh Robbani.pdf" download className="rounded-md bg-emerald-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Download CV</a>
-                                {/* <a href="#" className="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">→</span></a> */}
+                                <a href="https://regista-app.vercel.app" className="text-sm font-semibold leading-6 text-white">Learn more <span aria-hidden="true">My Next TS Project</span></a>
                             </div>
                         </div>
                     </div>
