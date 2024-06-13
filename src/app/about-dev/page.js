@@ -129,8 +129,8 @@ export default function AboutDevPage() {
             description: 'Sport GPS tracker and athlete management startup',
             position: 'Founder',
             job: [
-                'Designed and developed a sport GPS tracker for football players to track player vital and performance assessment tools.'
-                'For demo you can access the app at regista-app.vercel.app
+                'Designed and developed a sport GPS tracker for football players to track player vital and performance assessment tools.',
+                'For demo you can access the app at regista-app.vercel.app'
             ],
             place: 'Bandung, Indonesia',
             time: 'Feb 2019 – Present',
