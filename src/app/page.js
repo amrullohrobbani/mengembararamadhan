@@ -103,10 +103,13 @@ export default function Home() {
           const playerL = playerList.map((player) => {
             return {
               ...player,
-              seasonExp: amalanList.filter((obj) => obj.uid === player.uid)?.map((obj) => sumTotal(obj, chart))?.reduce((a, b) => (a) + b, 0)
+              seasonExp: amalanList.filter((obj) => obj.uid === player.uid)?.filter((obj) => obj.seasonid === season)?.map((obj) => sumTotal(obj, chart))?.reduce((a, b) => (a) + b, 0)
             }
           })
           .sort((a, b) => {
+            if(season === '') {
+              return b.exp - a.exp
+            }
             return b.seasonExp - a.seasonExp;
           })
           setPlayers(playerL)
@@ -282,6 +285,9 @@ export default function Home() {
                         <TableCell>
                           <div className="flex gap-3">
                             {player?.displayName}
+                            <div className="relative w-10">
+                              <RankIcon rank={rank(level(player.exp))} />
+                            </div>
                             {
                               player?.target && 
                               <CheckIcon
@@ -290,9 +296,9 @@ export default function Home() {
                             }
                           </div>
                         </TableCell>
-                        <TableCell>{level(player.exp)}</TableCell>
+                        <TableCell>{season === ''?level(player.exp):level(player.seasonExp)}</TableCell>
                         <TableCell className="relative">
-                            <RankIcon rank={rank(level(player.exp))} />
+                            <RankIcon rank={season === ''?rank(level(player.exp)):rank(level(player.seasonExp))} />
                         </TableCell>
                       </TableRow>
                     ))}
