@@ -48,7 +48,7 @@ export default function Home() {
   const [myProgress, setMyProgress] = useState([])
   const [teams, setTeams] = useState()
   const [chart, setChart] = useState('')
-  const [season, setSeason] = useState('')
+  const [season, setSeason] = useState('season_4')
 
   const getInitials = (inputString) => {
     if(!inputString) return 
